@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { supabase } from "../lib/supabase"
 import { checkingCredentials, clearErrorMessage, login, logout } from "../Store/Auth/AuthSlice"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { onLogoutIncident } from "../Store/Incident/IncidentSlice"
 
 
-export const userAuthStore = () => {
+export const useAuthStore = () => {
 
     const {status } = useSelector(state => state.auth)
+    const data_auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
     const startLogin = async({email, password}) => {
@@ -60,7 +62,7 @@ export const userAuthStore = () => {
             } 
 
             const username = await AsyncStorage.getItem('userName');
-            const uid = await AsyncStorage.getItem('userId');
+            const uid = await AsyncStorage.getItem('UserId');
             dispatch(login({ name: username, uid: uid }));
             
         } catch (error) {
@@ -73,11 +75,24 @@ export const userAuthStore = () => {
     };
     
 
+    const startLogout = async() =>{
+        try {
+            const  error  = await supabase.auth.signOut()
+            dispatch(logout())
+            dispatch(onLogoutIncident())
+            console.log(error);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
   return {
 
     status,
+    data_auth,
     startLogin,
     checkAuthToken,
+    startLogout,
 
   }
 }

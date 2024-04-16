@@ -2,37 +2,60 @@ import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { userLocation } from '../../Helpers/userLocation';
 import { LeafletView, LeafletWebViewEvents, MapShapeType } from 'react-native-leaflet-maps';
+import { Button } from 'react-native';
+import { ButtonUbication } from '../Components/ButtonUbication';
+import { useAuthStore } from '../../hooks/useAuthStore';
+import { useIncidentStore } from '../../hooks/useIncidentStore';
+import { useSelector } from 'react-redux';
 
 
 
 export const CollectiveMap = () => {
 
-    const DEFAULT_COORDINATE = { lat: 8.75101, lng: -75.87853 }
+    const {loadIncidents} = useIncidentStore()
+    const {incidents} = useSelector(state => state.incident)
+    const [incidentShapes, setIncidentShapes] = useState([]);
 
     const [errorMsg, setErrorMsg] = useState('')
-    const [mapRegion, setMapRegion] = useState({
-        latitude: 8.743821,
-        longitude: -75.877,
-    })
-
     const [markerCoordinate, setMarkerCoordinate] = useState('');
 
     const updateUserLocation = async () => {
         try {
+            console.log('incidents:',incidents);
             const location = await userLocation();
             setMapRegion(location);
+            console.log('su ubicacion es: ', location)
         } catch (error) {
             setErrorMsg(error.message);
         }
     };
+    
+    const onLoadIncidents = async() => {
+        await loadIncidents()
+    }
+
+      useEffect(() => {
+         updateUserLocation()
+         onLoadIncidents()
+         setMarkerCoordinate(mapRegion)
+     }, []) 
 
 
+     const renderIncidentShapes = () => {
+        return incidents.map((incident) => ({
+            shapeType: MapShapeType.CIRCLE,
+            color: '#FF0000', // Color rojo para los incidentes
+            id: incident.id,
+            center: incident.ubication,
+            radius: 20, // Puedes ajustar el radio del círculo según tus necesidades
+        }));
+    };
 
-    useEffect(() => {
-        updateUserLocation()
-        setMarkerCoordinate(mapRegion)
-    }, [])
-
+    useEffect(()=>{
+       const res = renderIncidentShapes()
+       setIncidentShapes(res)
+        console.log('ver_mas:', res);
+    },[incidents])
 
     const onMapPress = (event) => {
         const { coordinate } = event.nativeEvent;
@@ -42,6 +65,7 @@ export const CollectiveMap = () => {
 
 
     const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
+    const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 })
 
     const onMapTouched = (message) => {
         if (
@@ -50,7 +74,6 @@ export const CollectiveMap = () => {
         ) {
             const position = message.payload.touchLatLng;
             setCoordinate(position);
-            console.log('pos:', position)
             Alert.alert(`Map Touched at:`, `${position.lat}, ${position.lng}`);
         }
     };
@@ -58,9 +81,6 @@ export const CollectiveMap = () => {
         <View style={styles.container}>
 
             <LeafletView
-
-
-                onMessageReceived={onMapTouched}
                 mapLayers={[
                     {
                         baseLayerNombre: 'OpenStreetMap',
@@ -74,30 +94,18 @@ export const CollectiveMap = () => {
 
                 mapMarkers={[
                     {
-                        position: DEFAULT_COORDINATE,
+                        position: mapRegion,
                         icon: '📍',
                         size: [32, 32],
                     },
-                    /* {
-                      position: coordinate,
-                      icon: '📍',
-                      size: [32, 32],
-                    }, */
 
                 ]}
-                mapCenterPosition={DEFAULT_COORDINATE}
-                mapShapes={[
-                    {
-                        shapeType: MapShapeType.CIRCLE,
-                        color: "#123123",
-                        id: "1",
-                        center: { lat: 8.725727, lng: -75.84471 },
-                        radius: 20,
-                    }
-                ]}
+                mapCenterPosition={mapRegion}
+                mapShapes={incidentShapes}
 
             />
 
+            <ButtonUbication updateUserLocation={updateUserLocation} ></ButtonUbication>
         </View>
     )
 

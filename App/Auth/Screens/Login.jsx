@@ -2,14 +2,14 @@ import {Button, Text, TextInput, StyleSheet, View, Alert } from 'react-native';
 import { supabase } from '../../lib/supabase'; 
 import { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
-import { userAuthStore } from '../../Helpers/userAuthStore';
+import { useAuthStore } from '../../hooks/useAuthStore'; 
 
 
 export const Login = ({ navigation }) => {
 
   console.log('first')
 
-  const {startLogin} = userAuthStore()
+  const {startLogin} = useAuthStore()
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)

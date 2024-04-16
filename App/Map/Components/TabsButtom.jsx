@@ -5,6 +5,7 @@ import { Card } from "../Screens/Cards";
 import { Map } from "../Views/Map";
 import { IncidentForm } from "../Screens/IncidentForm";
 import { CollectiveMap } from "../Views/CollectiveMap";
+import { Settings } from "../Views/Settings";
 
 export const TabButtom = () => {
   const Tab = createMaterialBottomTabNavigator();
@@ -66,7 +67,7 @@ export const TabButtom = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={IncidentForm}
+        component={Settings}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ color }) => (

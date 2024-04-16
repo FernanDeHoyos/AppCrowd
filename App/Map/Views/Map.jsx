@@ -4,13 +4,12 @@ import { IncidentForm } from '../Screens/IncidentForm';
 import { userLocation } from '../../Helpers/userLocation'; 
 import { LeafletView, LeafletWebViewEvents, MapShapeType  } from 'react-native-leaflet-maps';
 import { AppBar } from '../Components/AppBar';
-import customMarkerIcon from '../../../assets/map-marker.png';
 
 
 
 export const Map = () => {
     
-    const DEFAULT_COORDINATE = { lat: 8.75101, lng: -75.87853 }
+    const DEFAULT_COORDINATE = { lat: 8.7510105, lng: -75.8785305 }
 
     const [errorMsg, setErrorMsg] = useState('')
     const [mapRegion, setMapRegion] = useState({
@@ -31,10 +30,10 @@ export const Map = () => {
       
   
 
-useEffect(() => {
+/* useEffect(() => {
     updateUserLocation()
     setMarkerCoordinate(mapRegion)
-}, [])
+}, []) */
 
 
 const onMapPress = (event) => {
@@ -86,11 +85,11 @@ mapLayers={[
             icon: '📍',
             size: [32, 32],
           },
-          /* {
+           /* {
             position: coordinate,
             icon: '📍',
             size: [32, 32],
-          }, */
+          },  */
           
         ]}
         mapCenterPosition={DEFAULT_COORDINATE}
@@ -99,7 +98,7 @@ mapLayers={[
             shapeType: MapShapeType.CIRCLE,
             color: "#123123",
             id: "1",
-            center: { lat: 8.725727, lng: -75.84471 },
+            center: coordinate,
             radius: 20,
           }
         ]}
