@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button, StyleSheet, View } from 'react-native'
-import { IconButton, MD3Colors } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import { IconButton } from 'react-native-paper'
 
 export const ButtonUbication = ({updateUserLocation}) => {
+
   return (
     <View style={styles.container}>
     <IconButton
@@ -10,7 +11,7 @@ export const ButtonUbication = ({updateUserLocation}) => {
     iconColor={'#289C8E'}
     size={30}
     onPress={updateUserLocation}
-  />
+   />
     </View>
   )
 }

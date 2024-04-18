@@ -1,9 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { useAuthStore } from "./hooks/useAuthStore"
-import { TabButtom } from "./Map/Components/TabsButtom"
 import { AuthNavigate } from "./Auth/AuthNavigate/AuthNavigate"
 import { useEffect } from "react"
 import { Text } from "react-native"
+import { StackMap } from "./Map/Views/Stack" 
 
 export const AppMap = () => {
 
@@ -21,7 +21,7 @@ export const AppMap = () => {
     return (
       
       <NavigationContainer>
-      { (status === 'authenticated') ? < TabButtom/> : <AuthNavigate />}
+      { (status === 'authenticated') ? < StackMap/> : <AuthNavigate />}
       </NavigationContainer>
     )
 

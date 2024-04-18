@@ -2,51 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import {  Alert, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { IncidentForm } from '../Screens/IncidentForm'; 
 import { userLocation } from '../../Helpers/userLocation'; 
-import { LeafletView, LeafletWebViewEvents, MapShapeType  } from 'react-native-leaflet-maps';
-import { AppBar } from '../Components/AppBar';
+import { LeafletView, LeafletWebViewEvents  } from 'react-native-leaflet-maps';
+import { AppBar } from '../Components/AppBar'; 
+import { Button } from 'react-native-elements';
 
 
 
-export const Map = () => {
+export const MapForm = ({navigation}) => {
     
     const DEFAULT_COORDINATE = { lat: 8.7510105, lng: -75.8785305 }
 
-    const [errorMsg, setErrorMsg] = useState('')
-    const [mapRegion, setMapRegion] = useState({
-     latitude: 8.743821,
-     longitude: -75.877,
-    })
-
-    const [markerCoordinate, setMarkerCoordinate] = useState('');
-
+  
     const updateUserLocation = async () => {
         try {
           const location = await userLocation();
           setMapRegion(location);
         } catch (error) {
-          setErrorMsg(error.message);
         }
       };
       
   
-
-/* useEffect(() => {
-    updateUserLocation()
-    setMarkerCoordinate(mapRegion)
-}, []) */
-
-
-const onMapPress = (event) => {
-    const { coordinate } = event.nativeEvent;
-    setMarkerCoordinate(coordinate);
-    };
-
-    const handleMapMessageReceived = (message) => {
-        //console.log('Received message from map:', message);
-        // Aquí puedes manejar los mensajes recibidos del mapa
-      };
-
-    
       const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
 
       const onMapTouched = (message) => {
@@ -60,6 +35,9 @@ const onMapPress = (event) => {
           Alert.alert(`Map Touched at:`, `${position.lat}, ${position.lng}`);
         }
       };
+
+
+      
 return (
   <View style={styles.container}>
         <AppBar></AppBar>
@@ -81,7 +59,7 @@ mapLayers={[
 
         mapMarkers={[
           {
-            position: DEFAULT_COORDINATE,
+            position: coordinate,
             icon: '📍',
             size: [32, 32],
           },
@@ -93,19 +71,13 @@ mapLayers={[
           
         ]}
         mapCenterPosition={DEFAULT_COORDINATE}
-        mapShapes={[
-          {
-            shapeType: MapShapeType.CIRCLE,
-            color: "#123123",
-            id: "1",
-            center: coordinate,
-            radius: 20,
-          }
-        ]}
+       
         
       />
       
-     
+      <View style={styles.buttonContainer}>
+         <Button titleStyle={{ marginHorizontal: 20, color: 'black' }} onPress={() => navigation.navigate('MapCollective')} title={'Map'} type='clear'/>
+      </View>
        <IncidentForm coordenadas={coordinate} ></IncidentForm>
        </View>
     )

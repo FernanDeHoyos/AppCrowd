@@ -15,7 +15,6 @@ export const useAuthStore = () => {
     const startLogin = async({email, password}) => {
         try {
             dispatch(checkingCredentials())
-            console.log({ email, password });
             const { error, data } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 Alert.alert(error.message);
@@ -36,7 +35,6 @@ export const useAuthStore = () => {
             // Dispatch de la acción de login
             dispatch(login({ name: user.email, uid: user.id }));
     
-            console.log(data);
         } catch (error) {
             dispatch(logout('Error de autenticacion'))
             setTimeout(() => {
@@ -53,7 +51,6 @@ export const useAuthStore = () => {
         try {
             // Obtener el token de acceso almacenado en AsyncStorage
             const token = await AsyncStorage.getItem('supabaseToken');
-            console.log(token)
             // Verificar si el token está presente
             if (!token) {
                 // Si el token no está presente, realizar acciones de logout
@@ -80,6 +77,9 @@ export const useAuthStore = () => {
             const  error  = await supabase.auth.signOut()
             dispatch(logout())
             dispatch(onLogoutIncident())
+            await AsyncStorage.removeItem('supabaseToken');
+            await AsyncStorage.removeItem('userName');
+            await AsyncStorage.removeItem('UserId');
             console.log(error);
         } catch (error) {
             console.log(error);

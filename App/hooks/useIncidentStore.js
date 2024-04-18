@@ -17,7 +17,7 @@ export const useIncidentStore = () => {
                         type_incident: additionalOption,
                         description: description,
                         ubication: coordenadas,
-                        id_uder: uid
+                        id_user: uid
                     })
                 .select()
 

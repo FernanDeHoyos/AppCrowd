@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import { useIncidentStore } from '../../hooks/useIncidentStore'; 
@@ -10,27 +10,31 @@ export const IncidentForm = ({coordenadas}) => {
   const {addNewIncident} = useIncidentStore()
   const {user: {uid}} = useSelector(state => state.auth)
 
-  
+  console.log('user: ', uid);
+
   const [description, setDescription] = useState('');
   const [severity, setSeverity] = useState('');
   const [additionalOption, setAdditionalOption] = useState('');
   const [additionalOptions, setAdditionalOptions] = useState([]);
 
+
   const handleSubmit = async () => {
     // Verificar que los campos requeridos no estén vacíos
     if (!severity || !description || !coordenadas) {
+      Alert.alert('Por favor completa todos los campos.')
       console.log('Por favor completa todos los campos.');
       return;
     }
     
     // Verificar que la opción adicional esté seleccionada si es requerida
     if (additionalOptions.length > 0 && !additionalOption) {
+      Alert.alert('Por favor selecciona una opción adicional.')
       console.log('Por favor selecciona una opción adicional.');
       return;
     }
   
     // Enviar el formulario si todos los campos requeridos están completos
-    await addNewIncident({severity, additionalOption, description, coordenadas, });
+    await addNewIncident({severity, additionalOption, description, coordenadas, uid});
     console.log({severity, additionalOption, description, coordenadas, uid});
   };
   

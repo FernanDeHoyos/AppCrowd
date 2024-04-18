@@ -6,26 +6,22 @@ import { supabase } from '../../lib/supabase';
 export const Register = ({ navigation }) => {
 
   const {handleChange, resetForm, values} = useForm({
-    email: 'nkmdWQiDcJMunDP1mXGd81O72tGGXXYjRQft',
+    phone: '',
     password:''
 })
 
-const {email, password, } = values;
+const {phone, password, } = values;
  
 
   const handleRegister = async() => {
-    
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      })
-      console.log(data)
-      
+const { data, error } = await supabase.auth.signUp({
+  phone: phone,
+  password: password,
+  options: {
+    channel: 'sms'
+  }
+})
+     console.log(error); 
 }
 
 const SignIn = () => {
@@ -46,12 +42,12 @@ const SignIn = () => {
   
 
     <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>Phone</Text>
         <TextInput 
             style={styles.Input}
-            placeholder='Enter your email'
-            onChangeText={(text) => handleChange('email', text)}
-            value={email}
+            placeholder='Enter your phone'
+            onChangeText={(text) => handleChange('phone', text)}
+            value={phone}
         />
     </View>
 

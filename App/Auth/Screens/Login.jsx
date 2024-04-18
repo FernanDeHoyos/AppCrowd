@@ -1,8 +1,9 @@
-import {Button, Text, TextInput, StyleSheet, View, Alert } from 'react-native';
+import { Text, TextInput, StyleSheet, View, Alert } from 'react-native';
 import { supabase } from '../../lib/supabase'; 
 import { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import { useAuthStore } from '../../hooks/useAuthStore'; 
+import { Button } from 'react-native-elements';
 
 
 export const Login = ({ navigation }) => {
@@ -75,7 +76,8 @@ export const Login = ({ navigation }) => {
     buttonStyle={{
                 borderRadius: 10,
                 borderTopRightRadius: 0,
-              }} color='#000'
+                backgroundColor: '#117C6F'
+              }} color='#117C6F'
     disabled={loading} 
     /> 
 
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: 'center',
-        backgroundColor: '#000', 
+        backgroundColor: '#117C6F', 
         paddingTop: 200
       },
     containerButtom: {
