@@ -4,6 +4,7 @@ import { AuthNavigate } from "./Auth/AuthNavigate/AuthNavigate"
 import { useEffect } from "react"
 import { Text } from "react-native"
 import { StackMap } from "./Map/Views/Stack" 
+import { Loading } from "./Map/Screens/Loading"
 
 export const AppMap = () => {
 
@@ -15,7 +16,7 @@ export const AppMap = () => {
       },[])
       
         if(status === 'checking'){
-            return  <><Text>Cargando...</Text></>
+            return  <Loading/>
         }
   
     return (

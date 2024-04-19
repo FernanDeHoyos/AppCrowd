@@ -9,32 +9,35 @@ export const TabsButtom = () => {
   const navigation = useNavigation()
 
   return (
-    <View style={style.buttonContainer}> 
-    <Button 
-    icon={<Icon
-        name="map"
-        size={30}
-        color="white"
-      />}
-    onPress={() => navigation.navigate('MapForm')} />
+    <View style={style.buttonContainer}>
+      <Button
+        buttonStyle={style.buttonStyle} color='#2FC4B2'
+        icon={<Icon
+          name="map"
+          size={30}
+          color="white"
+        />}
+        onPress={() => navigation.navigate('MapForm')} />
 
-    <Button 
-    icon={<Icon
-        name="settings"
-        size={30}
-        color="white"
-      />}
-    onPress={() => navigation.navigate('Settings')} />
+      <Button
+        buttonStyle={style.buttonStyle} color='#2FC4B2'
+        icon={<Icon
+          name="list"
+          size={30}
+          color="white"
+        />}
+        onPress={() => navigation.navigate('ListIncidents')} />
 
-<Button 
-    icon={<Icon
-        name="map"
-        size={30}
-        color="white"
-      />}
-    onPress={() => navigation.navigate('MapForm')} />
+      <Button
+        buttonStyle={style.buttonStyle} color='#2FC4B2'
+        icon={<Icon
+          name="settings"
+          size={30}
+          color="white"
+        />}
+        onPress={() => navigation.navigate('Settings')} />
 
-</View>
+    </View>
   )
 }
 
@@ -45,11 +48,16 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     justifyContent: 'space-evenly',
-    alignItems: 'center', 
+    alignItems: 'center',
     position: 'absolute',
     bottom: 10,
     left: 20,
     end: 10
-    
-},
+  },
+  buttonStyle: {
+    borderRadius: 10,
+    borderTopRightRadius: 0,
+    backgroundColor: '#2FC4B2'
+  }
+
 })

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: 'center',
-        backgroundColor: '#000', 
+        backgroundColor: '#117C6F', 
         paddingTop: 100
       },
     containerButtom: {

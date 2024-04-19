@@ -6,6 +6,7 @@ import { onAddNewIncident, onLoadIncidents } from "../Store/Incident/IncidentSli
 export const useIncidentStore = () => {
 
     const dispatch = useDispatch()
+    const {incidents} = useSelector((state) => state.incident)
 
     const addNewIncident = async ({ severity, additionalOption, description, coordenadas, uid }) => {
         try {
@@ -34,12 +35,12 @@ export const useIncidentStore = () => {
 
 
     const loadIncidents = async () => {
-
         try {
             let { data: Incident, error } = await supabase
             .from('Incident')
             .select('*')
             dispatch(onLoadIncidents(Incident))
+            console.log('desde aca:', Incident);
         } catch (error) {
             console.log(error);
         }
@@ -47,6 +48,7 @@ export const useIncidentStore = () => {
     }
 
     return {
+        incidents,
         addNewIncident, 
         loadIncidents
     }

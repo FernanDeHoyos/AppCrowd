@@ -40,7 +40,7 @@ export const MapForm = ({navigation}) => {
       
 return (
   <View style={styles.container}>
-        <AppBar></AppBar>
+
        
         <LeafletView
 
@@ -74,10 +74,6 @@ mapLayers={[
        
         
       />
-      
-      <View style={styles.buttonContainer}>
-         <Button titleStyle={{ marginHorizontal: 20, color: 'black' }} onPress={() => navigation.navigate('MapCollective')} title={'Map'} type='clear'/>
-      </View>
        <IncidentForm coordenadas={coordinate} ></IncidentForm>
        </View>
     )

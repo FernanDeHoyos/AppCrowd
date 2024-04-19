@@ -46,7 +46,6 @@ export const Login = ({ navigation }) => {
      <Text style={styles.title}>Welcome to MyApp!</Text>
 
     <View style={styles.containerButtom}>
-    <Text style={styles.TextInput}>Login</Text>
     <View style={styles.containerBoxInput}>
 
     <View style={styles.inputContainer}>
@@ -98,14 +97,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
         backgroundColor: '#117C6F', 
-        paddingTop: 200
+        paddingTop: '30%'
       },
     containerButtom: {
       flex: 1,
       width: '100%',
       backgroundColor: '#f6f6f6',
       alignItems: "center",
-      justifyContent: 'space-evenly',
+      justifyContent: 'center',
       borderTopLeftRadius: 80,
     },
     title: {

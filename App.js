@@ -9,7 +9,7 @@ export default function App() {
   return (
     
     <Provider store={store}>
-    <StatusBar backgroundColor={'black'} />
+    <StatusBar backgroundColor={'#2FC4B2'} />
     <AppMap></AppMap>
     </Provider>
     

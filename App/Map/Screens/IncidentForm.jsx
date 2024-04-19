@@ -3,10 +3,11 @@ import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import { useIncidentStore } from '../../hooks/useIncidentStore'; 
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export const IncidentForm = ({coordenadas}) => {
-
+  const navigate = useNavigation()
   const {addNewIncident} = useIncidentStore()
   const {user: {uid}} = useSelector(state => state.auth)
 
@@ -19,6 +20,7 @@ export const IncidentForm = ({coordenadas}) => {
 
 
   const handleSubmit = async () => {
+    
     // Verificar que los campos requeridos no estén vacíos
     if (!severity || !description || !coordenadas) {
       Alert.alert('Por favor completa todos los campos.')
@@ -33,9 +35,26 @@ export const IncidentForm = ({coordenadas}) => {
       return;
     }
   
-    // Enviar el formulario si todos los campos requeridos están completos
-    await addNewIncident({severity, additionalOption, description, coordenadas, uid});
-    console.log({severity, additionalOption, description, coordenadas, uid});
+    // Confirmación antes de enviar los datos
+    Alert.alert(
+      'Confirmación',
+      '¿Estás seguro de que deseas enviar los datos?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel'
+        },
+        {
+          text: 'Enviar',
+          onPress: async () => {
+            await addNewIncident({severity, additionalOption, description, coordenadas, uid});
+            console.log({severity, additionalOption, description, coordenadas, uid});
+            navigate.navigate('MapCollective')
+          }
+        }
+      ]
+    );
+      
   };
   
 

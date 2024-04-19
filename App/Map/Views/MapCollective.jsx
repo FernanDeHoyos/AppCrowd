@@ -6,38 +6,30 @@ import { ButtonUbication } from '../Components/ButtonUbication';
 import { useIncidentStore } from '../../hooks/useIncidentStore'; 
 import { useSelector } from 'react-redux';
 import { TabsButtom } from '../Components/TabsButtom'; 
+import { Button } from 'react-native-elements';
+import { useIsFocused } from '@react-navigation/native';
 
 
 
 export const MapCollective = ({ navigation }) => {
-    const { loadIncidents } = useIncidentStore();
-    const { incidents } = useSelector((state) => state.incident);
+    const isFocused = useIsFocused();
+    const { loadIncidents, incidents } = useIncidentStore();
     const [incidentShapes, setIncidentShapes] = useState([]);
     const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 });
 
     const updateUserLocation = async () => {
         try {
             const location = await userLocation();
-            setMapRegion(location);
+            setMapRegion(location);      
         } catch (error) {
-            // setErrorMsg(error.message);
+             setErrorMsg(error.message);
         }
     };
-
-    const onLoad = useCallback(async () => {
-        await loadIncidents();
-    }, [loadIncidents]);
-
-    useEffect(() => {
-        updateUserLocation()
-        console.log('si lo renderiza');
-        onLoad();
-    }, []);
-
-    useEffect(() => {
-        setIncidentShapes(renderIncidentShapes());
-    }, [incidents]);
-
+    
+    const LoadIncidents = async()=>{
+        await loadIncidents()
+    }
+    
     const renderIncidentShapes = () => {
         return incidents.map((incident) => ({
             shapeType: MapShapeType.CIRCLE,
@@ -48,25 +40,18 @@ export const MapCollective = ({ navigation }) => {
         }));
     };
 
-    const updateIncidentShapes = async () => {
-        try {
-            console.log('si lo renderiza');
-            await onLoad();
-            setIncidentShapes(renderIncidentShapes());
-        } catch (error) {
-            console.error('Error al actualizar incidentes:', error);
-        }
-    };
+    useEffect(()=>{
+        updateUserLocation()
+        LoadIncidents()
+        const render = renderIncidentShapes()
+        setIncidentShapes(render)
 
-    const onMapTouched = (message) => {
-        if (
-            message.event === LeafletWebViewEvents.ON_MAP_TOUCHED &&
-            message.payload?.touchLatLng
-        ) {
-            const position = message.payload.touchLatLng;
-            Alert.alert(`Map Touched at:`, `${position.lat}, ${position.lng}`);
-        }
-    };
+    },[])
+
+    
+
+    
+   
 
     return (
         <View style={styles.container}>
@@ -90,9 +75,11 @@ export const MapCollective = ({ navigation }) => {
                 ]}
                 mapCenterPosition={mapRegion}
                 mapShapes={incidentShapes}
-                onMessageReceived={onMapTouched}
             />
             <ButtonUbication updateUserLocation={updateUserLocation} />
+            <View>
+                <Button title='Reiniciar' onPress={renderIncidentShapes} ></Button>
+            </View>
             <TabsButtom/>
         </View>
     );
