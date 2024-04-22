@@ -14,6 +14,7 @@ export const useAuthStore = () => {
 
     const startLogin = async({email, password}) => {
         try {
+            console.log({email, password});
             dispatch(checkingCredentials())
             const { error, data } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
@@ -55,6 +56,9 @@ export const useAuthStore = () => {
             if (!token) {
                 // Si el token no está presente, realizar acciones de logout
                 dispatch(logout());
+                await AsyncStorage.removeItem('supabaseToken');
+                await AsyncStorage.removeItem('userName');
+                await AsyncStorage.removeItem('UserId');
                 return;
             } 
 

@@ -5,13 +5,14 @@ import { userLocation } from '../../Helpers/userLocation';
 import { LeafletView, LeafletWebViewEvents  } from 'react-native-leaflet-maps';
 import { AppBar } from '../Components/AppBar'; 
 import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 
 
-export const MapForm = ({navigation}) => {
+export const MapForm = () => {
     
     const DEFAULT_COORDINATE = { lat: 8.7510105, lng: -75.8785305 }
-
+    const navigation = useNavigation()
   
     const updateUserLocation = async () => {
         try {
@@ -41,7 +42,10 @@ export const MapForm = ({navigation}) => {
 return (
   <View style={styles.container}>
 
-       
+<View>
+        <Button title='Ir a...' onPress={() => navigation.navigate('MapCollective')}>
+      </Button>
+      </View>
         <LeafletView
 
         
@@ -74,6 +78,7 @@ mapLayers={[
        
         
       />
+      
        <IncidentForm coordenadas={coordinate} ></IncidentForm>
        </View>
     )

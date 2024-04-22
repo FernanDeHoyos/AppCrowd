@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, ScrollView } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
 import { useIncidentStore } from '../../hooks/useIncidentStore'
 
 export const ListIncidents = () => {
 
-    const { incidents } = useIncidentStore()
+    const {  loadIncidents, incidents } = useIncidentStore()
 
+    useEffect(() => {
+        loadIncidents(); // Cargar incidentes al montar el componente
+    }, []);
     console.log('Incidents desde List:', incidents);
 
     const list = incidents.map((incident, index) => ({

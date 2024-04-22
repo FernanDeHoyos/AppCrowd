@@ -1,33 +1,36 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { userLocation } from '../../Helpers/userLocation'; 
-import { LeafletView, LeafletWebViewEvents, MapShapeType } from 'react-native-leaflet-maps';
-import { ButtonUbication } from '../Components/ButtonUbication';
-import { useIncidentStore } from '../../hooks/useIncidentStore'; 
-import { useSelector } from 'react-redux';
-import { TabsButtom } from '../Components/TabsButtom'; 
+import React, { useEffect, useState } from 'react';
+import {  StyleSheet, View } from 'react-native';
+import { LeafletView, MapShapeType } from 'react-native-leaflet-maps';
 import { Button } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
+
+import { userLocation } from '../../Helpers/userLocation'; 
+import { ButtonUbication } from '../Components/ButtonUbication';
+import { useIncidentStore } from '../../hooks/useIncidentStore'; 
+import { TabsButtom } from '../Components/TabsButtom'; 
 
 
 
 export const MapCollective = ({ navigation }) => {
-    const isFocused = useIsFocused();
     const { loadIncidents, incidents } = useIncidentStore();
     const [incidentShapes, setIncidentShapes] = useState([]);
     const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 });
+    const isFocused = useIsFocused();
 
     const updateUserLocation = async () => {
         try {
             const location = await userLocation();
             setMapRegion(location);      
         } catch (error) {
-             setErrorMsg(error.message);
+             //setErrorMsg(error.message);
         }
     };
     
-    const LoadIncidents = async()=>{
-        await loadIncidents()
+    const LoadIncidents = ()=>{
+         loadIncidents()
+         const render = renderIncidentShapes()
+         setIncidentShapes(render)
+         console.log('render: ',render);
     }
     
     const renderIncidentShapes = () => {
@@ -45,12 +48,8 @@ export const MapCollective = ({ navigation }) => {
         LoadIncidents()
         const render = renderIncidentShapes()
         setIncidentShapes(render)
-
     },[])
 
-    
-
-    
    
 
     return (
@@ -78,7 +77,7 @@ export const MapCollective = ({ navigation }) => {
             />
             <ButtonUbication updateUserLocation={updateUserLocation} />
             <View>
-                <Button title='Reiniciar' onPress={renderIncidentShapes} ></Button>
+                <Button title='Reiniciar' onPress={LoadIncidents} ></Button>
             </View>
             <TabsButtom/>
         </View>
