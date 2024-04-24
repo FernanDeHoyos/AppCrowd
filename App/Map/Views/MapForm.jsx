@@ -50,16 +50,7 @@ return (
 
         
  onMessageReceived={onMapTouched}
-mapLayers={[
-    {
-      baseLayerNombre: 'OpenStreetMap',
-      baseLayerIsComprobado: true,
-      tipoDeCapa: 'TileLayer',
-      baseLayer: true,
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      atribución: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-    }
-  ]}
+
 
         mapMarkers={[
           {

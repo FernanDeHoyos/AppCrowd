@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 
+
+/* Componente que muestra el boton para mover a posicion actual en el mapa */
 export const ButtonUbication = ({updateUserLocation}) => {
 
   return (
@@ -12,6 +14,7 @@ export const ButtonUbication = ({updateUserLocation}) => {
     size={30}
     onPress={updateUserLocation}
    />
+  
     </View>
   )
 }
@@ -26,7 +29,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         bottom: 100,
-        right: 10, // Cambiar de left: 10 a right: 10
+        right: 10, 
 
       },
 })

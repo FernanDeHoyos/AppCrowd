@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react'
-import { View, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
 import { useIncidentStore } from '../../hooks/useIncidentStore'
+import { Filters } from '../Components/Filters'
 
 export const ListIncidents = () => {
+    const { incidents, loadIncidents} = useIncidentStore()
 
-    const {  loadIncidents, incidents } = useIncidentStore()
 
-    useEffect(() => {
+     useEffect(() => {
         loadIncidents(); // Cargar incidentes al montar el componente
-    }, []);
-    console.log('Incidents desde List:', incidents);
+    }, []); 
 
     const list = incidents.map((incident, index) => ({
         name: incident.type_incident,
@@ -18,9 +18,14 @@ export const ListIncidents = () => {
         subtitle: incident.description
     }));
 
+   
+
+
     return (
+        <View style={styles.listView}>
+            <Filters/>
         <ScrollView>
-            <View>
+            <View >
                 {
                     list.map((l, i) => (
                         <ListItem key={i} bottomDivider>
@@ -34,5 +39,36 @@ export const ListIncidents = () => {
                 }
             </View>
         </ScrollView>
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    listView: {
+       flex: 1,
+       position: 'relative',
+       backgroundColor: '#fff'
+    },
+    checkRadio:{
+        justifyContent: 'center',
+    },
+    checkBoxContainer: {
+        justifyContent: 'center', // Centrar los CheckBox horizontalmente
+        position: 'absolute', // Posición absoluta para superponer los CheckBox sobre otros componentes
+        right: 10, // Distancia desde el lado derecho de la pantalla
+        top: 40, // Distancia desde la parte superior de la pantalla
+        zIndex: 1, // Colocar el contenedor por encima de otros componentes
+        backgroundColor: '#fff', // Color de fondo del contenedor
+        borderRadius: 5, // Bordes redondeados
+        padding: 10, // Espaciado interno para el contenido
+        elevation: 4, // Agregar sombra
+    },
+    buttonContainer: {
+        backgroundColor: '#fffc',
+        alignItems: 'flex-end',
+        paddingTop: 5,
+        paddingRight: 10,
+    },
+  
+    
+})

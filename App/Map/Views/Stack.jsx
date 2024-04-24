@@ -3,6 +3,7 @@ import { MapForm } from './MapForm';
 import { MapCollective } from './MapCollective';
 import { Settings } from './Settings';
 import { ListIncidents } from './ListIncidents';
+import { SegmentFilters } from '../Components/SegmentFilters';
 
 const Stack = createNativeStackNavigator();
 

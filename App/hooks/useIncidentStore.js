@@ -22,7 +22,7 @@ export const useIncidentStore = () => {
                     })
                 .select()
 
-            console.log('datos:', data)
+            console.log('datos:', { severity, additionalOption, description, coordenadas, uid })
             dispatch(onAddNewIncident({ severity, additionalOption, description, coordenadas, uid }))
 
             if (error) {
@@ -47,9 +47,35 @@ export const useIncidentStore = () => {
 
     }
 
+    const FilterIncidentById = async(id_user) => {
+        try { 
+            let { data: Incident, error } = await supabase
+            .from('Incident')
+            .select('*').eq('id_user', id_user)
+            dispatch(onLoadIncidents(Incident))
+            console.log('filtro:',Incident);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const FilterIncidentByRisk = async(type_risk) => {
+        try {
+            let { data: Incident, error } = await supabase
+            .from('Incident')
+            .select('*').eq('type_risk', type_risk)
+            dispatch(onLoadIncidents(Incident))
+            console.log('filtro:',Incident);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return {
         incidents,
         addNewIncident, 
-        loadIncidents
+        loadIncidents,
+        FilterIncidentById,
+        FilterIncidentByRisk
     }
 }

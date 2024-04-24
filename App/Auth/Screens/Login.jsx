@@ -1,46 +1,35 @@
+import {  useState } from 'react';
 import { Text, TextInput, StyleSheet, View, Alert } from 'react-native';
+import { Button } from 'react-native-elements';
+
 import { supabase } from '../../lib/supabase'; 
-import { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import { useAuthStore } from '../../hooks/useAuthStore'; 
-import { Button } from 'react-native-elements';
 
 
 export const Login = ({ navigation }) => {
 
-  console.log('first')
-
-  const {startLogin} = useAuthStore()
+    /* Importamos el metodo para iniciar la autenticacion desde useAuthStore*/
+    const {startLogin} = useAuthStore()
 
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(false)
+    /* Hooks personalizado para formulario {useForm} */
     const { values, handleChange, resetForm } = useForm({
         email: '',
         password: '',
       });
-      const {email, password} = values
 
+    /* Desestructuramos valores de values */
+    const {email, password} = values
 
-    
-
+    /* utilizamos  startLogin dentro de la funcion signInWithEmail
+    Para iniciar autenticacion*/
     async function signInWithEmail() {
      await startLogin({email, password})
   }
       
 
-  async function signUpWithEmail() {
-    setLoading(true)
-    const {data: { session }, error,} = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
-
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
-    setLoading(false)
-  }
-
- 
+ /* Vista de componentes */
   return (
     <View style={styles.container}>
      <Text style={styles.title}>Welcome to MyApp!</Text>
@@ -91,6 +80,7 @@ export const Login = ({ navigation }) => {
   )
 }
 
+/* Estilos de componentes */
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -49,7 +49,7 @@ export const IncidentForm = ({coordenadas}) => {
           onPress: async () => {
             await addNewIncident({severity, additionalOption, description, coordenadas, uid});
             console.log({severity, additionalOption, description, coordenadas, uid});
-            navigate.navigate('MapCollective')
+            navigate.navigate('ListIncidents')
           }
         }
       ]

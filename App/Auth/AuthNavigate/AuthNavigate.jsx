@@ -5,6 +5,7 @@ import { Login } from '../Screens/Login';
 
 const Stack = createNativeStackNavigator();
 
+/* Se define la navegacion antes de la autenticacion */
 export const AuthNavigate = () => {
   return (
     <>

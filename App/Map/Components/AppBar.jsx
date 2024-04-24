@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Divider, IconButton, MD3Colors, Menu, PaperProvider } from 'react-native-paper';
 
 export const AppBar = () => {
+  
     const [visible, setVisible] = React.useState(false);
 
     const openMenu = () => setVisible(true);
