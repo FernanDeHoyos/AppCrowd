@@ -34,13 +34,12 @@ export const useIncidentStore = () => {
     }
 
 
-    const loadIncidents = async () => {
+    const loadAllIncidents = async () => {
         try {
             let { data: Incident, error } = await supabase
             .from('Incident')
             .select('*')
             dispatch(onLoadIncidents(Incident))
-            console.log('desde aca:', Incident);
         } catch (error) {
             console.log(error);
         }
@@ -74,7 +73,7 @@ export const useIncidentStore = () => {
     return {
         incidents,
         addNewIncident, 
-        loadIncidents,
+        loadAllIncidents,
         FilterIncidentById,
         FilterIncidentByRisk
     }

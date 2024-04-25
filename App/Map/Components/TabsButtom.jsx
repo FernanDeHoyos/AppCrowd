@@ -1,8 +1,6 @@
-
-import { useNavigation } from '@react-navigation/native'
-import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'
 
 
 /* Componente para ver botones de navegacion */
@@ -60,6 +58,7 @@ const style = StyleSheet.create({
     end: 10,
     backgroundColor: '#2FC4B2',
     borderRadius: 10,
+    elevation: 4,
   },
   buttonStyle: {
     borderRadius: 10,

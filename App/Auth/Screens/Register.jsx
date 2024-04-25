@@ -3,7 +3,6 @@ import { TextInput, Text, StyleSheet, View} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { useForm } from '../../hooks/useForm'; // Importa el hook personalizado useForm para gestionar el estado del formulario
-import { supabase } from '../../lib/supabase'; // Importa supabase para interactuar con la base de datos
 import { useAuthStore } from '../../hooks/useAuthStore';
 
 export const Register = ({ navigation }) => {
@@ -11,19 +10,20 @@ export const Register = ({ navigation }) => {
   const {startSignUp} = useAuthStore()
   // Usa el hook useForm para manejar el estado del formulario
   const {handleChange, resetForm, values} = useForm({
-    displayName: '',
-    email: '',
+    first_name: '',
+    last_name: '',
     phone: '',
+    age: '',
+    email: '',
     password:''
   });
 
   // Extrae los valores del estado del formulario
-  const {displayName, email, phone, password} = values;
+  const {first_name, last_name, phone, age, email, password} = values;
 
   // Función para manejar el registro de usuarios
   const handleRegister = async() => {
-    console.log({displayName, email, phone, password});
-    await startSignUp({ email,password})
+    await startSignUp({ first_name, last_name, phone, age, email, password })
   }
 
 
@@ -38,30 +38,49 @@ export const Register = ({ navigation }) => {
         <Text style={styles.TextInput}>SignUp</Text>
         {/* Contenedor de campos de entrada */}
         <View style={styles.containerBoxInput}>
-        {/* <View style={styles.inputContainer}>
-            <Text style={styles.label}>Name</Text>
+        <View style={styles.inputContainer}>
+            <Text style={styles.label}>First name</Text>
             <TextInput 
               style={styles.Input}
-              placeholder='Enter your Name'
-              onChangeText={(text) => handleChange('displayName', text)} // Maneja cambios en el campo de teléfono
-              value={displayName}
+              placeholder='Enter your firs name'
+              onChangeText={(text) => handleChange('first_name', text)} // Maneja cambios en el campo de teléfono
+              value={first_name}
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
+            <Text style={styles.label}>Last name</Text>
+            <TextInput 
+              style={styles.Input}
+              placeholder='Enter your last name'
+              onChangeText={(text) => handleChange('last_name', text)} // Maneja cambios en el campo de teléfono
+              value={last_name}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Phone</Text>
             <TextInput 
               style={styles.Input}
               placeholder='Enter your phone'
-              onChangeText={(text) => handleChange('email', text)} // Maneja cambios en el campo de teléfono
-              value={email}
+              onChangeText={(text) => handleChange('phone', text)} // Maneja cambios en el campo de teléfono
+              value={phone}
             />
-          </View> */}
+          </View> 
           {/* Campo de entrada para el teléfono */}
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Age</Text>
+            <TextInput 
+              style={styles.Input}
+              placeholder='Enter your Age'
+              onChangeText={(text) => handleChange('age', text)} // Maneja cambios en el campo de teléfono
+              value={age}
+            />
+          </View>
+
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email</Text>
             <TextInput 
               style={styles.Input}
-              placeholder='Enter your Email'
+              placeholder='Enter your email'
               onChangeText={(text) => handleChange('email', text)} // Maneja cambios en el campo de teléfono
               value={email}
             />

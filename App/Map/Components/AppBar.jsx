@@ -1,7 +1,6 @@
 import React from 'react';
-import { Header, Icon } from '@rneui/base';
 import { StyleSheet, View } from 'react-native';
-import { Button, Divider, IconButton, MD3Colors, Menu, PaperProvider } from 'react-native-paper';
+import {  Divider, IconButton, MD3Colors, Menu, PaperProvider } from 'react-native-paper';
 
 export const AppBar = () => {
   

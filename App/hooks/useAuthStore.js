@@ -14,7 +14,6 @@ export const useAuthStore = () => {
 
     const startLogin = async ({ email, password }) => {
         try {
-            console.log({ email, password });
             dispatch(checkingCredentials())
             const { error, data } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
@@ -32,7 +31,7 @@ export const useAuthStore = () => {
             // Por ejemplo, puedes guardar el nombre del usuario
             await AsyncStorage.setItem('userName', user.email);
             await AsyncStorage.setItem('UserId', user.id);
-
+            console.log(data);
             // Dispatch de la acción de login
             dispatch(login({ name: user.email, uid: user.id }));
 
@@ -48,16 +47,25 @@ export const useAuthStore = () => {
         }
     }
 
-    const startSignUp = async({ email, password}) => {
+    const startSignUp = async ({ email, password, first_name, last_name, phone, age }) => {
+
 
         const { data, error } = await supabase.auth.signUp(
             {
                 email: email,
                 password: password,
+                options: {
+                    data: {
+                        first_name: first_name,
+                        last_name: last_name,
+                        phone: phone,
+                        age: age,
+                    }
+                }
             }
         )
 
-        console.log({error, data});
+        console.log({ error, data });
     }
 
     const checkAuthToken = async () => {
@@ -106,7 +114,7 @@ export const useAuthStore = () => {
 
         status,
         data_auth,
-        
+
         startLogin,
         checkAuthToken,
         startSignUp,

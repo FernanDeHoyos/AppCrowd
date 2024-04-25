@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 100,
         right: 10, 
+        elevation: 4,
 
       },
 })

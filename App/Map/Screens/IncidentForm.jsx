@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
-import { useIncidentStore } from '../../hooks/useIncidentStore'; 
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+
+import { useIncidentStore } from '../../hooks'; 
 
 export const IncidentForm = ({coordenadas}) => {
   const navigate = useNavigation()
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     padding: 10,
+    elevation: 5
   },
   Input: {
     width: '100%', 

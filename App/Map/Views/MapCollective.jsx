@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LeafletView, MapShapeType } from 'react-native-leaflet-maps';
-import { Button, FAB } from 'react-native-elements';
-import { useIsFocused } from '@react-navigation/native';
 
-import { userLocation } from '../../Helpers/userLocation';
-import { ButtonUbication } from '../Components/ButtonUbication';
-import { useIncidentStore } from '../../hooks/useIncidentStore';
-import { TabsButtom } from '../Components/TabsButtom';
-import { Filters } from '../Components/Filters';
+import { userLocation } from '../../Helpers'; 
+import { useIncidentStore } from '../../hooks'; 
+import { ButtonUbication, TabsButtom, Filters } from '../Components'; 
 
 
 
 export const MapCollective = ({ navigation }) => {
-    const { loadIncidents, incidents } = useIncidentStore();
+    const { loadAllIncidents, incidents } = useIncidentStore();
     const [incidentShapes, setIncidentShapes] = useState([]);
     const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 });
 
@@ -28,10 +24,8 @@ export const MapCollective = ({ navigation }) => {
     };
 
     const LoadIncidents = async () => {
-        
         const render = renderIncidentShapes()
         setIncidentShapes(render)
-        console.log('render: ', render);
     }
 
     const renderIncidentShapes = () => {
@@ -62,7 +56,9 @@ export const MapCollective = ({ navigation }) => {
         });
     };
     
-
+    useEffect(() => {
+        loadAllIncidents()
+    },[])
 
     useEffect(() => {
         updateUserLocation()
@@ -86,9 +82,11 @@ export const MapCollective = ({ navigation }) => {
                 ]}
                 mapCenterPosition={mapRegion}
                 mapShapes={incidentShapes}
+                doDebug={false}
+                zoomControl={false}
             />
             <ButtonUbication updateUserLocation={updateUserLocation} />
-            
+
             <TabsButtom />
         </View>
     );

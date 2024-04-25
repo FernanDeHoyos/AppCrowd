@@ -1,28 +1,31 @@
-import { Ionicons } from '@expo/vector-icons'
-import { Button, CheckBox } from '@rneui/base'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { View } from 'react-native'
-import { useIncidentStore } from '../../hooks/useIncidentStore'
 import { useSelector } from 'react-redux'
+import { Button, CheckBox } from '@rneui/base'
+import { Ionicons } from '@expo/vector-icons'
+import { useIncidentStore } from '../../hooks' 
 
 export const Filters = () => {
 
     const {user:{uid}} = useSelector((state) => state.auth)
-    const {FilterIncidentById, FilterIncidentByRisk} = useIncidentStore()
+    const {FilterIncidentById, FilterIncidentByRisk, loadAllIncidents} = useIncidentStore()
     const [selectedIndex, setIndex] = useState(0);
     const [checkBoxVisible, setCheckBoxVisible] = useState(false); // Estado para controlar la visibilidad de los CheckBox
 
     useEffect(() => {
         if (selectedIndex === 0) {
-            FilterIncidentById(uid);
+            loadAllIncidents()
         } else if (selectedIndex === 1) {
-            FilterIncidentByRisk('Alto riesgo con apoyo');
+            FilterIncidentById(uid);
         } else if (selectedIndex === 2) {
-            FilterIncidentByRisk('Mediano riesgo');
+            FilterIncidentByRisk('Alto riesgo con apoyo');
         } else if (selectedIndex === 3) {
+            FilterIncidentByRisk('Mediano riesgo');
+        } else if (selectedIndex === 4) {
             FilterIncidentByRisk('Bajo riesgo');
         }
+        
     }, [selectedIndex]);
 
     const toggleCheckBoxVisibility = () => {   
@@ -47,31 +50,39 @@ export const Filters = () => {
 
             {checkBoxVisible && (
                 <View style={styles.checkBoxContainer}>
-                    <CheckBox
-                        title='Mios'
+                     <CheckBox
+                        title='Todos'
                         checked={selectedIndex === 0}
                         onPress={() => setIndex(0)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                     />
+
                     <CheckBox
-                        title='Alto riesgo'
+                        title='Mios'
                         checked={selectedIndex === 1}
                         onPress={() => setIndex(1)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                     />
                     <CheckBox
-                        title='Mediano riesgo'
+                        title='Alto riesgo'
                         checked={selectedIndex === 2}
                         onPress={() => setIndex(2)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                     />
                     <CheckBox
-                        title='Bajo riesgo'
+                        title='Mediano riesgo'
                         checked={selectedIndex === 3}
                         onPress={() => setIndex(3)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                    />
+                    <CheckBox
+                        title='Bajo riesgo'
+                        checked={selectedIndex === 4}
+                        onPress={() => setIndex(4)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                         containerStyle={styles.checkBox}
@@ -103,6 +114,7 @@ const styles = StyleSheet.create({
         elevation: 4, // Agregar sombra
     },
     buttonContainer: {
+        elevation: 4,
         backgroundColor: '#fffc',
         alignItems: 'flex-end',
         position: 'absolute',

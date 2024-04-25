@@ -1,29 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {  Alert, Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { IncidentForm } from '../Screens/IncidentForm'; 
-import { userLocation } from '../../Helpers/userLocation'; 
 import { LeafletView, LeafletWebViewEvents  } from 'react-native-leaflet-maps';
-import { AppBar } from '../Components/AppBar'; 
-import { Button } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
 
 
 
 export const MapForm = () => {
     
-    const DEFAULT_COORDINATE = { lat: 8.7510105, lng: -75.8785305 }
-    const navigation = useNavigation()
-  
-    const updateUserLocation = async () => {
-        try {
-          const location = await userLocation();
-          setMapRegion(location);
-        } catch (error) {
-        }
-      };
-      
-  
-      const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
+      const [coordinate, setCoordinate] = useState({  lat: 8.7510105, lng: -75.8785305  });
 
       const onMapTouched = (message) => {
         if (
@@ -32,8 +16,6 @@ export const MapForm = () => {
         ) {
           const position = message.payload.touchLatLng;
           setCoordinate(position);
-          console.log('pos:', position)
-          Alert.alert(`Map Touched at:`, `${position.lat}, ${position.lng}`);
         }
       };
 
@@ -43,8 +25,7 @@ return (
   <View style={styles.container}>
 
 <View>
-        <Button title='Ir a...' onPress={() => navigation.navigate('MapCollective')}>
-      </Button>
+        
       </View>
         <LeafletView
 
@@ -58,15 +39,9 @@ return (
             icon: '📍',
             size: [32, 32],
           },
-           /* {
-            position: coordinate,
-            icon: '📍',
-            size: [32, 32],
-          },  */
-          
         ]}
-        mapCenterPosition={DEFAULT_COORDINATE}
-       
+        mapCenterPosition={coordinate}
+        doDebug={false}
         
       />
       

@@ -1,8 +1,7 @@
 import {  useState } from 'react';
-import { Text, TextInput, StyleSheet, View, Alert } from 'react-native';
+import { Text, TextInput, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { supabase } from '../../lib/supabase'; 
 import { useForm } from '../../hooks/useForm';
 import { useAuthStore } from '../../hooks/useAuthStore'; 
 
