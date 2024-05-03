@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { supabase } from "../lib/supabase"
-import { onAddNewIncident, onLoadIncidents } from "../Store/Incident/IncidentSlice"
+import { onAddNewIncident, onLoadIncidents, setPhotosActiveNote } from "../Store/Incident/IncidentSlice"
+import { fileUpload } from "../Helpers/FileUpload"
 
 
 export const useIncidentStore = () => {
@@ -46,6 +47,17 @@ export const useIncidentStore = () => {
 
     }
 
+     const startUploadingFiles = async(files = []) => {
+                  
+            const fileUploadPromises = [];
+            for (const file of files){
+                fileUploadPromises.push(fileUpload(file))
+            }
+            const URLPhotos = await Promise.all(fileUploadPromises)
+            dispatch(setPhotosActiveNote(URLPhotos))
+        }
+    
+
     const FilterIncidentById = async(id_user) => {
         try { 
             let { data: Incident, error } = await supabase
@@ -74,6 +86,7 @@ export const useIncidentStore = () => {
         incidents,
         addNewIncident, 
         loadAllIncidents,
+        startUploadingFiles,
         FilterIncidentById,
         FilterIncidentByRisk
     }

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { LeafletView, MapShapeType } from 'react-native-leaflet-maps';
 
 import { userLocation } from '../../Helpers'; 
 import { useIncidentStore } from '../../hooks'; 
-import { ButtonUbication, TabsButtom, Filters } from '../Components'; 
+import { ButtonUbication } from '../Components/ButtonUbication';
+
+import { View } from 'react-native';
+import { Filters } from '../Components/Filters';
+import { TabsButtom } from '../Components/TabsButtom';
 
 
 

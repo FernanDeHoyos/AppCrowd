@@ -41,6 +41,10 @@ export const IncidentSlice = createSlice({
                 ubication: incident.ubication
             }));
         },
+        setPhotosActiveNote: (state, {payload}) => {
+            state.activeIncident.imageUrls = [...state.activeIncident.imageUrls, ...payload]
+            state.isSaving = false
+        },
         onLogoutIncident: (state) => {
             state.isLoadIncidents = true
             state.incidents = []
@@ -55,5 +59,6 @@ export const {
     onUpdateIncident, 
     onDeleteIncident, 
     onLogoutIncident,
-    onLoadIncidents
+    onLoadIncidents,
+    setPhotosActiveNote
 } = IncidentSlice.actions

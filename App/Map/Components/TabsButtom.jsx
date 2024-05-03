@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 
 /* Componente para ver botones de navegacion */
@@ -10,14 +11,18 @@ export const TabsButtom = () => {
 
   return (
     <View style={style.buttonContainer}>
+
+      <Button
+        buttonStyle={style.buttonStyle} color='#2FC4B2'
+        icon={<MaterialCommunityIcons
+          name="map-marker-multiple"
+          size={30}
+          color="white" />}
+        onPress={() => navigation.navigate('MapCollective')} />
       {/* Boton navegacion a MapForm*/}
       <Button
         buttonStyle={style.buttonStyle} color='#2FC4B2'
-        icon={<Icon
-          name="map"
-          size={30}
-          color="white"
-        />}
+        icon={<MaterialCommunityIcons name="map-marker-plus" size={30} color="white" />}
         onPress={() => navigation.navigate('MapForm')} />
 
       {/* Boton navegacion a ListIncidents*/}

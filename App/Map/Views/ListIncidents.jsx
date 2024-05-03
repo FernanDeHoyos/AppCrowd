@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
 
 import { useIncidentStore } from '../../hooks' 
-import { Filters } from '../Components' 
+import { Filters, TabsButtom } from '../Components' 
 
 export const ListIncidents = () => {
     const { incidents, loadAllIncidents} = useIncidentStore()
@@ -40,6 +40,7 @@ export const ListIncidents = () => {
                 }
             </View>
         </ScrollView>
+        <TabsButtom />
         </View>
     )
 }

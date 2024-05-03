@@ -2,8 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MapForm } from './MapForm';
 import { MapCollective } from './MapCollective';
 import { Settings } from './Settings';
-import { ListIncidents } from './ListIncidents';
-import { SegmentFilters } from '../Components/SegmentFilters';
+import { ListIncidents } from './ListIncidents'; 
 
 const Stack = createNativeStackNavigator();
 

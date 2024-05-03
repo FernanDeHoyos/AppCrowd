@@ -64,8 +64,10 @@ export const useAuthStore = () => {
                 }
             }
         )
-
-        console.log({ error, data });
+        const {session} = data
+        if (error) Alert.alert(error.message)
+        if (!session) Alert.alert('Please check your inbox for email verification!')
+       
     }
 
     const checkAuthToken = async () => {

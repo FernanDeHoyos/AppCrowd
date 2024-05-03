@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IncidentForm } from '../Screens/IncidentForm'; 
 import { LeafletView, LeafletWebViewEvents  } from 'react-native-leaflet-maps';
+import { TabsButtom } from '../Components/TabsButtom';  
 
 
 
@@ -46,6 +47,7 @@ return (
       />
       
        <IncidentForm coordenadas={coordinate} ></IncidentForm>
+       <TabsButtom />
        </View>
     )
 

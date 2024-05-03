@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 import { useIncidentStore } from '../../hooks'; 
+import { SelectImages } from '../Components/SelectImages';
 
 export const IncidentForm = ({coordenadas}) => {
   const navigate = useNavigation()
@@ -48,7 +49,7 @@ export const IncidentForm = ({coordenadas}) => {
         {
           text: 'Enviar',
           onPress: async () => {
-            await addNewIncident({severity, additionalOption, description, coordenadas, uid});
+            //await addNewIncident({severity, additionalOption, description, coordenadas, uid});
             console.log({severity, additionalOption, description, coordenadas, uid});
             navigate.navigate('ListIncidents')
           }
@@ -111,6 +112,8 @@ export const IncidentForm = ({coordenadas}) => {
         multiline
         onChangeText={(text) => setDescription(text)}
       />
+
+      <SelectImages/>
           
           <Button style={styles.Button} textColor='#fff' icon={'send'}  onPress={handleSubmit} > Enviar </Button>
     </View>
