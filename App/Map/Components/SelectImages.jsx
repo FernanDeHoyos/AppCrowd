@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Image, View, StyleSheet, ScrollView } from 'react-native'; // Agrega ScrollView para permitir el desplazamiento si hay muchas imágenes
 import * as ImagePicker from 'expo-image-picker';
-import { useIncidentStore } from '../../hooks';
-import { useSelector } from 'react-redux';
 
 export const SelectImages = () => {
-  const {startUploadingFiles} = useIncidentStore()
-  const {} = useSelector((state) => state.incident)
   const [images, setImages] = useState([]);
 
   const pickImage = async () => {
@@ -27,9 +23,10 @@ export const SelectImages = () => {
     }
   };
 
-  const handleImageSelection = () => {
+ /*  const handleImageSelection = () => {
     startUploadingFiles(images)
-   };
+    console.log(imagesUrl);
+   }; */
 
 
   return (
@@ -40,7 +37,6 @@ export const SelectImages = () => {
           <Image key={index} source={{ uri }} style={styles.image} />
         ))}
       </ScrollView>
-      <Button title='ver' onPress={handleImageSelection} />
     </View>
   );
 };

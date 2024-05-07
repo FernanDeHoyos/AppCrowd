@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { Button, CheckBox } from '@rneui/base'
 import { Ionicons } from '@expo/vector-icons'
-import { useIncidentStore } from '../../hooks' 
+import { useIncidentStore } from '../../hooks/useIncidentStore'
 
 export const Filters = () => {
 

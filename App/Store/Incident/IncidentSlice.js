@@ -5,28 +5,29 @@ export const IncidentSlice = createSlice({
     initialState: {
         isLoadIncidents: true,
         incidents: [],
-        activeIncident: null
-     },
+        activeIncident: null,
+        images_url: []
+    },
     reducers: {
         onSetActiveIncident: (state, { payload }) => {
-            state.activeIncident = payload
+            state.activeIncident = payload;
         },
         onAddNewIncident: (state, { payload }) => {
-            state.incidents.push(payload)
-            state.activeIncident = null
+            state.incidents.push(payload);
+            state.activeIncident = null;
         },
         onUpdateIncident: (state, { payload }) => {
             state.incidents = state.incidents.map(incident => {
-                if(incident.id === payload.id){
+                if (incident.id === payload.id) {
                     return payload;
                 }
                 return incident;
-            })
+            });
         },
         onDeleteIncident: (state) => {
-            if(state.activeIncident){
-                state.incidents = state.incidents.filter(incident => incident._id !== state.activeIncident._id)
-                state.activeIncident = null
+            if (state.activeIncident) {
+                state.incidents = state.incidents.filter(incident => incident._id !== state.activeIncident._id);
+                state.activeIncident = null;
             }
         },
         onLoadIncidents: (state, { payload }) => {
@@ -38,17 +39,19 @@ export const IncidentSlice = createSlice({
                 id_user: incident.id_user,
                 type_incident: incident.type_incident,
                 type_risk: incident.type_risk,
-                ubication: incident.ubication
+                ubication: incident.ubication,
+                // Agregar la URL de la imagen a cada incidente si está disponible
+                images_url: incident.images_url || null
             }));
         },
-        setPhotosActiveNote: (state, {payload}) => {
-            state.activeIncident.imageUrls = [...state.activeIncident.imageUrls, ...payload]
-            state.isSaving = false
+        // Nuevo reducer para actualizar la URL de la imagen en el incidente activo
+        onUpdateImageURL: (state, { payload }) => {
+            state.images_url.push(payload)
         },
         onLogoutIncident: (state) => {
-            state.isLoadIncidents = true
-            state.incidents = []
-            state.activeIncident = null
+            state.isLoadIncidents = true;
+            state.incidents = [];
+            state.activeIncident = null;
         }
     }
 });
@@ -60,5 +63,5 @@ export const {
     onDeleteIncident, 
     onLogoutIncident,
     onLoadIncidents,
-    setPhotosActiveNote
-} = IncidentSlice.actions
+    onUpdateImageURL // Agregar el nuevo reducer
+} = IncidentSlice.actions;

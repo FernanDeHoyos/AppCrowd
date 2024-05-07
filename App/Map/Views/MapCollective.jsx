@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { LeafletView, MapShapeType } from 'react-native-leaflet-maps';
+import React, { useEffect, useState, useMemo } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { LeafletView, LeafletWebViewEvents, MapShapeType, Marker } from 'react-native-leaflet-maps';
 
-import { userLocation } from '../../Helpers'; 
-import { useIncidentStore } from '../../hooks'; 
+import { userLocation } from '../../Helpers/userLocation';
+import { useIncidentStore } from '../../hooks/useIncidentStore';
 import { ButtonUbication } from '../Components/ButtonUbication';
-
-import { View } from 'react-native';
 import { Filters } from '../Components/Filters';
 import { TabsButtom } from '../Components/TabsButtom';
-
-
 
 export const MapCollective = ({ navigation }) => {
     const { loadAllIncidents, incidents } = useIncidentStore();
     const [incidentShapes, setIncidentShapes] = useState([]);
     const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 });
+    const [selectedIncident, setSelectedIncident] = useState(null);
 
+    const [coordinate, setCoordinate] = useState({ lat: 0, lng: 0 });
+
+    // Utiliza useMemo para calcular un valor clave único basado en incidents
+    const key = useMemo(() => JSON.stringify(incidents), [incidents]);
 
     const updateUserLocation = async () => {
         try {
             const location = await userLocation();
             setMapRegion(location);
         } catch (error) {
-            //setErrorMsg(error.message);
+            // setErrorMsg(error.message);
         }
     };
 
     const LoadIncidents = async () => {
-        const render = renderIncidentShapes()
-        setIncidentShapes(render)
-    }
+        const render = renderIncidentShapes();
+        setIncidentShapes(render);
+    };
 
     const renderIncidentShapes = () => {
         return incidents.map((incident) => {
@@ -49,7 +50,7 @@ export const MapCollective = ({ navigation }) => {
                     color = '#000000'; // Negro para cualquier otro tipo de riesgo
                     break;
             }
-            
+
             return {
                 shapeType: MapShapeType.CIRCLE,
                 color: color,
@@ -59,73 +60,86 @@ export const MapCollective = ({ navigation }) => {
             };
         });
     };
+
+    // Función para manejar el evento de presionar un marcador
+    const handleMarkerPress = (incident) => {
+        setSelectedIncident(incident);
+    };
+
+    useEffect(() => {
+        loadAllIncidents();
+    }, []);
+
+    useEffect(() => {
+        updateUserLocation();
+        LoadIncidents();
+    }, [incidents]);
+
+    const onMapTouched = (message) => {
+        if (
+          message.event === LeafletWebViewEvents.ON_MAP_TOUCHED &&
+          message.payload?.touchLatLng
+        ) {
+          const position = message.payload.touchLatLng;
+          
+          // Buscar si el toque ocurrió en un punto de incidente
+          const clickedIncident = incidentShapes.find(incident => {
+            // Calcular la distancia entre el punto tocado y el centro del incidente
+            const distance = Math.sqrt(
+              Math.pow(position.lat - incident.center.lat, 2) +
+              Math.pow(position.lng - incident.center.lng, 2)
+            );
     
-    useEffect(() => {
-        loadAllIncidents()
-    },[])
-
-    useEffect(() => {
-        updateUserLocation()
-        LoadIncidents()
-    }, [incidents])
-
-
+            // Si la distancia es menor que el radio del incidente, consideramos que se tocó ese incidente
+            return distance <= incident.radius;
+          });
+    
+          if (clickedIncident) {
+            console.log('Incidente seleccionado:', clickedIncident);
+          } else {
+            console.log('No se ha tocado ningún incidente.');
+          }
+        }
+    };
+    
+    
 
     return (
         <View style={styles.container}>
-
-            <Filters/>
+            <Filters />
+            {/* Agrega un key único al componente LeafletView */}
             <LeafletView
-                
-                mapMarkers={[
-                    {
-                        position: mapRegion,
-                        icon: '📍',
-                        size: [32, 32],
-                    },
-                ]}
-                mapCenterPosition={mapRegion}
-                mapShapes={incidentShapes}
-                doDebug={false}
-                zoomControl={false}
-            />
+    key={key}
+    onMessageReceived={onMapTouched}
+    
+    mapCenterPosition={mapRegion}
+    mapShapes={incidentShapes}
+    doDebug={false}
+    zoomControl={false}
+/>
+            {/* Mostrar etiqueta de información si se ha seleccionado un incidente */}
+            
             <ButtonUbication updateUserLocation={updateUserLocation} />
-
             <TabsButtom />
         </View>
     );
 };
 
-
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    map: {
-        width: '100%',
-        height: '60%',
-    },
-
-    button: {
-        width: 150,
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    buttonText: {
-        fontSize: 16,
-        color: '#000',
-    },
-
-    buttonReload:{
+    infoContainer: {
         position: 'absolute',
-        left: 10,
-        bottom: 100
-    }
-
+        bottom: 20,
+        left: 20,
+        backgroundColor: '#FFF',
+        padding: 10,
+        borderRadius: 5,
+        elevation: 5,
+    },
+    closeButton: {
+        color: 'blue',
+        marginTop: 5,
+    },
 });

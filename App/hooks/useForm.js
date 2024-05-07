@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+//Hook para usar en los formularios
 export const useForm = (initialValues) => {
   const [values, setValues] = useState(initialValues);
 

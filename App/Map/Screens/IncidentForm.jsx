@@ -1,26 +1,30 @@
 import { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
-import { useIncidentStore } from '../../hooks'; 
-import { SelectImages } from '../Components/SelectImages';
+import { useIncidentStore } from '../../hooks/useIncidentStore'; 
+import {  UpImagePicker } from '../../Helpers/ImagePicker';
+import { Image } from 'react-native';
 
 export const IncidentForm = ({coordenadas}) => {
   const navigate = useNavigation()
-  const {addNewIncident} = useIncidentStore()
+  const {addNewIncident, startUploadingFiles, images_url} = useIncidentStore()
   const {user: {uid}} = useSelector(state => state.auth)
-
-  console.log('user: ', uid);
 
   const [description, setDescription] = useState('');
   const [severity, setSeverity] = useState('');
   const [additionalOption, setAdditionalOption] = useState('');
   const [additionalOptions, setAdditionalOptions] = useState([]);
+  const [images, setImages] = useState([]);
 
 
+  const handlePickImage = async () => {
+    const newImages = await UpImagePicker(); 
+    setImages(prevImages => [...prevImages, ...newImages]); 
+  };
   const handleSubmit = async () => {
     
     // Verificar que los campos requeridos no estén vacíos
@@ -49,8 +53,8 @@ export const IncidentForm = ({coordenadas}) => {
         {
           text: 'Enviar',
           onPress: async () => {
-            //await addNewIncident({severity, additionalOption, description, coordenadas, uid});
-            console.log({severity, additionalOption, description, coordenadas, uid});
+            const URLPhotos = await startUploadingFiles(images);
+            await addNewIncident({severity, additionalOption, description, coordenadas, uid, images_url: URLPhotos});
             navigate.navigate('ListIncidents')
           }
         }
@@ -60,9 +64,6 @@ export const IncidentForm = ({coordenadas}) => {
   };
   
 
-  const getLocation =  () => {
-    console.log(coordenadas)
-  };
 
   const handleSeverityChange = (value) => {
     setSeverity(value);
@@ -113,8 +114,12 @@ export const IncidentForm = ({coordenadas}) => {
         onChangeText={(text) => setDescription(text)}
       />
 
-      <SelectImages/>
-          
+      <Button style={styles.Button} textColor='#fff' icon={'send'}  onPress={handlePickImage} > subir evidencia </Button>
+      <ScrollView horizontal>
+        {images.map((uri, index) => (
+          <Image key={index} source={{ uri }} style={styles.image} />
+        ))}
+      </ScrollView>
           <Button style={styles.Button} textColor='#fff' icon={'send'}  onPress={handleSubmit} > Enviar </Button>
     </View>
   );
@@ -132,6 +137,11 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 10,
     elevation: 5
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginRight: 10, // Agrega un margen derecho para separar las imágenes
   },
   Input: {
     width: '100%', 

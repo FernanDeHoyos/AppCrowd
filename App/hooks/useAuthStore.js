@@ -12,6 +12,7 @@ export const useAuthStore = () => {
     const data_auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
+    /* Funcion asincrona para iniciar autenticacion de usuario */
     const startLogin = async ({ email, password }) => {
         try {
             dispatch(checkingCredentials())
@@ -47,9 +48,11 @@ export const useAuthStore = () => {
         }
     }
 
+
+    /* Funcion asincrona para iniciar registro de usuario */
     const startSignUp = async ({ email, password, first_name, last_name, phone, age }) => {
 
-
+        /* Obtenemos los datos y los enviamos a la db */
         const { data, error } = await supabase.auth.signUp(
             {
                 email: email,
@@ -64,12 +67,17 @@ export const useAuthStore = () => {
                 }
             }
         )
+        /* desestructuramos session de la data */
         const {session} = data
+        /* verificamos si hay algun error */
         if (error) Alert.alert(error.message)
+         /* Le decimos al usuario que verfifique su email */
         if (!session) Alert.alert('Please check your inbox for email verification!')
        
     }
 
+     /* Funcion asincrona para verficar si el usuario sigue autenticado
+      y mantenerlo en la app hasta que su token expire */
     const checkAuthToken = async () => {
         try {
             // Obtener el token de acceso almacenado en AsyncStorage
@@ -97,12 +105,13 @@ export const useAuthStore = () => {
         }
     };
 
-
+    /* Funcion asincrona para hacer logout (cerrar sesion) */
     const startLogout = async () => {
         try {
             const error = await supabase.auth.signOut()
-            dispatch(logout())
-            dispatch(onLogoutIncident())
+            dispatch(logout()) //ejecutamos el reducer para limpiar las credenciales del usuario
+            dispatch(onLogoutIncident()) //ejecutamos el reducer para limpiar las los incidentes del usuario
+            //removemos los datos que estan en el storage
             await AsyncStorage.removeItem('supabaseToken');
             await AsyncStorage.removeItem('userName');
             await AsyncStorage.removeItem('UserId');
@@ -112,11 +121,12 @@ export const useAuthStore = () => {
         }
     }
 
-    return {
 
+    return {
+        //variables
         status,
         data_auth,
-
+        //funciones
         startLogin,
         checkAuthToken,
         startSignUp,
