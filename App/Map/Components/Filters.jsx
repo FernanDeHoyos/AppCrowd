@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { Button, CheckBox } from '@rneui/base'
-import { Ionicons } from '@expo/vector-icons'
-import { useIncidentStore } from '../../hooks/useIncidentStore'
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { Button, CheckBox } from '@rneui/base';
+import { Ionicons } from '@expo/vector-icons';
+import { useIncidentStore } from '../../hooks/useIncidentStore';
 
 export const Filters = () => {
-
-    const {user:{uid}} = useSelector((state) => state.auth)
-    const {FilterIncidentById, FilterIncidentByRisk, loadAllIncidents} = useIncidentStore()
+    const { user: { uid } } = useSelector((state) => state.auth);
+    const { FilterIncidentById, FilterIncidentByRisk, loadAllIncidents } = useIncidentStore();
     const [selectedIndex, setIndex] = useState(0);
     const [checkBoxVisible, setCheckBoxVisible] = useState(false); // Estado para controlar la visibilidad de los CheckBox
 
     useEffect(() => {
         if (selectedIndex === 0) {
-            loadAllIncidents()
+            loadAllIncidents();
         } else if (selectedIndex === 1) {
             FilterIncidentById(uid);
         } else if (selectedIndex === 2) {
@@ -26,38 +24,39 @@ export const Filters = () => {
             FilterIncidentByRisk('Bajo riesgo');
         }
         
+        // Ocultar los CheckBox cuando se selecciona un filtro
+        setCheckBoxVisible(false);
     }, [selectedIndex]);
 
     const toggleCheckBoxVisibility = () => {   
         setCheckBoxVisible(!checkBoxVisible); // Cambiar el estado de visibilidad al hacer clic en el botón
     };
 
-  return (
-    <>
-        <View style={styles.buttonContainer}>
+    return (
+        <>
+            <View style={styles.buttonContainer}>
                 <Button 
-                  color='#fffc'
-                  titleStyle={{color: 'black'}}
-                  onPress={toggleCheckBoxVisibility} >
-                 <Ionicons 
-                    name="options-outline" 
-                    size={24} 
-                    color="black"
-                    style={{paddingRight: 5}} />
-                 Filters
-                  </Button>
+                    color='#fffc'
+                    titleStyle={{ color: 'black' }}
+                    onPress={toggleCheckBoxVisibility} >
+                    <Ionicons 
+                        name="options-outline" 
+                        size={24} 
+                        color="black"
+                        style={{ paddingRight: 5 }} />
+                    Filters
+                </Button>
             </View>
 
             {checkBoxVisible && (
                 <View style={styles.checkBoxContainer}>
-                     <CheckBox
+                    <CheckBox
                         title='Todos'
                         checked={selectedIndex === 0}
                         onPress={() => setIndex(0)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                     />
-
                     <CheckBox
                         title='Mios'
                         checked={selectedIndex === 1}
@@ -89,29 +88,21 @@ export const Filters = () => {
                     />
                 </View>
             )}
-    </>
-  )
-}
+        </>
+    );
+};
 
 const styles = StyleSheet.create({
-    listView: {
-       flex: 1,
-       position: 'relative',
-       backgroundColor: '#fff'
-    },
-    checkRadio:{
-        justifyContent: 'center',
-    },
     checkBoxContainer: {
-        justifyContent: 'center', // Centrar los CheckBox horizontalmente
-        position: 'absolute', // Posición absoluta para superponer los CheckBox sobre otros componentes
-        right: 10, // Distancia desde el lado derecho de la pantalla
-        top: 60, // Distancia desde la parte superior de la pantalla
-        zIndex: 1, // Colocar el contenedor por encima de otros componentes
-        backgroundColor: '#fff', // Color de fondo del contenedor
-        borderRadius: 5, // Bordes redondeados
-        padding: 10, // Espaciado interno para el contenido
-        elevation: 4, // Agregar sombra
+        justifyContent: 'center',
+        position: 'absolute',
+        right: 10,
+        top: 60,
+        zIndex: 1,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        padding: 10,
+        elevation: 4,
     },
     buttonContainer: {
         elevation: 4,
@@ -121,9 +112,5 @@ const styles = StyleSheet.create({
         top: 10,
         right: 10, 
         zIndex: 1,
-
     },
-  
-    
-})
-
+});

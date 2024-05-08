@@ -37,11 +37,11 @@ return (
         mapMarkers={[
           {
             position: coordinate,
-            icon: '📍',
-            size: [32, 32],
+            icon: '🔴',
+            size: [8, 8],
           },
         ]}
-        mapCenterPosition={coordinate}
+        //mapCenterPosition={coordinate}
         doDebug={false}
         
       />
