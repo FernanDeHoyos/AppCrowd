@@ -1,171 +1,296 @@
-import React from 'react';
-import { TextInput, Text, StyleSheet, View} from 'react-native';
+import React, { useState } from 'react';
+import { TextInput, Text, StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { useForm } from '../../hooks/useForm'; // Importa el hook personalizado useForm para gestionar el estado del formulario
 import { useAuthStore } from '../../hooks/useAuthStore';
+import Toast from 'react-native-toast-message';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Register = ({ navigation }) => {
-
-  const {startSignUp} = useAuthStore()
+  const { startSignUp } = useAuthStore();
+  const [disable, setIsDisable] = useState(false)
   // Usa el hook useForm para manejar el estado del formulario
-  const {handleChange, resetForm, values} = useForm({
+  const { handleChange, resetForm, values } = useForm({
     first_name: '',
     last_name: '',
     phone: '',
     age: '',
     email: '',
-    password:''
+    password: '',
+    confirm_password: ''
   });
 
+  const [showPassword, setShowPassword] = useState(false); 
+  
+    // Function to toggle the password visibility state 
+    const toggleShowPassword = () => { 
+        setShowPassword(!showPassword); 
+    }; 
   // Extrae los valores del estado del formulario
-  const {first_name, last_name, phone, age, email, password} = values;
+  const { first_name, last_name, phone, age, email, password, confirm_password } = values;
+
+  const validateInputs = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const numberRegex = /^[0-9]+$/;
+
+    if (
+      !first_name.trim() ||
+      !last_name.trim() ||
+      !phone.trim() ||
+      !age.trim() ||
+      !email.trim() ||
+      !password ||
+      !confirm_password
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor completa todos los campos.',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    if (!numberRegex.test(phone.trim())) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'El celular debe contener solo números.',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    if (!numberRegex.test(phone.trim())) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'El celular debe contener solo números.',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    if (age < 18 || age > 100) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Edad no permitida',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    if (!emailRegex.test(email.trim())) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor ingresa un correo electrónico válido.',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    if (password !== confirm_password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Las contraseñas no coinciden.',
+        position: 'bottom',
+        visibilityTime: 3000
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   // Función para manejar el registro de usuarios
-  const handleRegister = async() => {
-    await startSignUp({ first_name, last_name, phone, age, email, password })
-  }
-
+  const handleRegister = async () => {
+    setIsDisable(true)
+    if (!validateInputs()) {
+      setIsDisable(false)
+      return;  // Detiene la ejecución si la validación falla
+    }
+    await startSignUp({ 
+      first_name: first_name.trim(), 
+      last_name: last_name.trim(), 
+      phone: phone.trim(), 
+      age: age.trim(), 
+      email: email.trim(), 
+      password: password.trim() 
+    });
+    resetForm()
+    setIsDisable(false)
+    navigation.navigate('Login')
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Título de bienvenida */}
-      <Text style={styles.title}>Welcome to MyApp!</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      keyboardVerticalOffset={80} // Ajusta según sea necesario
+    >
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <Text style={styles.title}>Registrate</Text>
 
-      {/* Contenedor principal */}
-      <View style={styles.containerButtom}>
-        {/* Texto de registro */}
-        <Text style={styles.TextInput}>SignUp</Text>
-        {/* Contenedor de campos de entrada */}
-        <View style={styles.containerBoxInput}>
-        <View style={styles.inputContainer}>
-            <Text style={styles.label}>First name</Text>
-            <TextInput 
-              style={styles.Input}
-              placeholder='Enter your firs name'
-              onChangeText={(text) => handleChange('first_name', text)} // Maneja cambios en el campo de teléfono
-              value={first_name}
-            />
+        <View style={styles.containerButtom}>
+          <View style={styles.containerBoxInput}>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Nombre'
+                onChangeText={(text) => handleChange('first_name', text)}
+                value={first_name}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Apellido'
+                onChangeText={(text) => handleChange('last_name', text)}
+                value={last_name}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Celular'
+                onChangeText={(text) => handleChange('phone', text)}
+                value={phone}
+                keyboardType='numeric'
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Ingrese su edad'
+                onChangeText={(text) => handleChange('age', text)}
+                value={age}
+                keyboardType='numeric'
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='ejemplo@gmail.com'
+                onChangeText={(text) => handleChange('email', text)}
+                value={email}
+                keyboardType='email-address'
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Contraseña'
+                onChangeText={(text) => handleChange('password', text)}
+                value={password}
+              secureTextEntry={!showPassword}
+              />
+              <MaterialCommunityIcons 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={24} 
+                    color="#aaa"
+                    style={styles.icon} 
+                    onPress={toggleShowPassword} 
+                /> 
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput 
+                style={styles.Input}
+                placeholder='Confirme su contraseña'
+                onChangeText={(text) => handleChange('confirm_password', text)}
+                value={confirm_password}
+                secureTextEntry={!showPassword}
+              />
+              <MaterialCommunityIcons 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={24} 
+                    color="#aaa"
+                    style={styles.icon} 
+                    onPress={toggleShowPassword} 
+                /> 
+            </View>
+            <View>
+              <Button 
+                title='REGISTRARSE'
+                buttonStyle={{
+                  borderRadius: 10,
+                  borderTopRightRadius: 0,
+                  backgroundColor: '#117C6F'
+                }} color='#117C6F'
+                disabled={disable}
+                onPress={handleRegister}
+              />
+            </View>
           </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Last name</Text>
-            <TextInput 
-              style={styles.Input}
-              placeholder='Enter your last name'
-              onChangeText={(text) => handleChange('last_name', text)} // Maneja cambios en el campo de teléfono
-              value={last_name}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Phone</Text>
-            <TextInput 
-              style={styles.Input}
-              placeholder='Enter your phone'
-              onChangeText={(text) => handleChange('phone', text)} // Maneja cambios en el campo de teléfono
-              value={phone}
-            />
-          </View> 
-          {/* Campo de entrada para el teléfono */}
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Age</Text>
-            <TextInput 
-              style={styles.Input}
-              placeholder='Enter your Age'
-              onChangeText={(text) => handleChange('age', text)} // Maneja cambios en el campo de teléfono
-              value={age}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput 
-              style={styles.Input}
-              placeholder='Enter your email'
-              onChangeText={(text) => handleChange('email', text)} // Maneja cambios en el campo de teléfono
-              value={email}
-            />
-          </View>
-          {/* Campo de entrada para la contraseña */}
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput 
-              style={styles.Input}
-              onChangeText={(text) => handleChange('password', text)} // Maneja cambios en el campo de contraseña
-              placeholder='Enter your password'
-              value={password}
-              secureTextEntry={true} // Oculta la contraseña
-            />
-          </View>
-          {/* Botón de registro */}
-          <View>
-            <Button 
-              title='Register'
-              onPress={handleRegister} // Llama a la función para manejar el registro
-            />
-          </View>
+          <Button 
+            titleStyle={{ marginHorizontal: 20, color: 'black' }} 
+            onPress={() => navigation.navigate('Login')} 
+            title={'Ya tengo cuenta'} 
+            type='clear'
+          />
         </View>
-        {/* Botón para navegar a la pantalla de inicio de sesión */}
-        <Button 
-          titleStyle={{ marginHorizontal: 20, color: 'black' }} 
-          onPress={() => navigation.navigate('Login')} 
-          title={'Ya tengo cuenta'} 
-          type='clear'
-        />
-      </View>
-    </View>
-  )
-}
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+};
 
 // Estilos del componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    backgroundColor: '#117C6F',
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: '#117C6F', 
-    paddingTop: 100
+    alignItems: 'center',
+    paddingVertical: 20,
   },
   containerButtom: {
-    flex: 1,
     width: '100%',
     backgroundColor: '#f6f6f6',
     alignItems: "center",
     justifyContent: 'space-evenly',
     borderTopLeftRadius: 80,
+    paddingVertical: 20,
   },
   title: {
     fontSize: 24,
     color: '#FFF',
     fontWeight: 'bold',
+    marginBottom: 20,
   },
-  TextInput:{
-    fontSize: 30,
-  },
-  containerTop:{
-    backgroundColor: '#000',
-    height: 80
-  },
-  containerBoxInput:{
+  containerBoxInput: {
     width: '80%',
     justifyContent: 'space-between',
     gap: 15,
   },
   Input: {
-    width: '100%', 
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 15, 
-    paddingVertical: 10, 
-    backgroundColor: '#FFF',
+    flex: 1, 
+        color: '#000', 
+        paddingVertical: 10, 
+        paddingRight: 10, 
+        fontSize: 16, 
   },
   inputContainer: {
-    padding: 5,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        backgroundColor: '#FFF', 
+        borderRadius: 8, 
+        paddingHorizontal: 14,
   },
   label: {
     color: '#000',
-    paddingLeft: 5
-  }, 
+    paddingLeft: 5,
+  },
 });
+

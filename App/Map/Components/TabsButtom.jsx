@@ -11,7 +11,6 @@ export const TabsButtom = () => {
 
   return (
     <View style={style.buttonContainer}>
-
       <Button
         buttonStyle={style.buttonStyle} color='#2FC4B2'
         icon={<MaterialCommunityIcons
@@ -29,11 +28,20 @@ export const TabsButtom = () => {
       <Button
         buttonStyle={style.buttonStyle} color='#2FC4B2'
         icon={<Icon
-          name="list"
+          name="playlist-add-check"
           size={30}
           color="white"
         />}
         onPress={() => navigation.navigate('ListIncidents')} />
+
+        <Button
+        buttonStyle={style.buttonStyle} color='#2FC4B2'
+        icon={<Icon
+          name="playlist-remove"
+          size={30}
+          color="white"
+        />}
+        onPress={() => navigation.navigate('noConfirmed')} />
 
       {/* Boton navegacion a Settings*/}
       <Button
@@ -59,7 +67,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     bottom: 10,
-    left: 20,
+    left: 10,
     end: 10,
     backgroundColor: '#2FC4B2',
     borderRadius: 10,

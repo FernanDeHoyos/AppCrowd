@@ -14,7 +14,6 @@ export const SelectImages = () => {
       allowsMultipleSelection: true, // Habilita la selección múltiple de imágenes
     });
 
-    console.log(result);
 
    
     if (!result.cancelled) {

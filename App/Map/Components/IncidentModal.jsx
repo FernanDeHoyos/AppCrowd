@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet, ScrollView, TouchableOpacity, Image as RNImage, Dimensions } from 'react-native';
-import { Button } from 'react-native-elements';
 import { LeafletView } from 'react-native-leaflet-maps';
+import { Button } from 'react-native-paper';
 
 export const IncidentModal = ({ visible, incident, onClose }) => {
     const [fullscreenImage, setFullscreenImage] = useState(null);
@@ -55,7 +55,7 @@ export const IncidentModal = ({ visible, incident, onClose }) => {
                             </TouchableOpacity>
                         ))}
                     </ScrollView>
-                    <Button title="Cerrar" onPress={onClose} />
+                    <Button  onPress={onClose} > Cerrar </Button>
                    
                 </View>
                 

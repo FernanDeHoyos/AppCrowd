@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, TextInput, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useIncidentStore } from '../../hooks/useIncidentStore'; 
 import {  UpImagePicker } from '../../Helpers/ImagePicker';
 import { Image } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { LoadingOverlay } from '../Components/LoadingOverlay';
 
 export const IncidentForm = ({coordenadas}) => {
   const navigate = useNavigation()
@@ -19,25 +21,43 @@ export const IncidentForm = ({coordenadas}) => {
   const [additionalOption, setAdditionalOption] = useState('');
   const [additionalOptions, setAdditionalOptions] = useState([]);
   const [images, setImages] = useState([]);
+  const [isDisable, setIsDisable] = useState(false)
+  const [isDisableEnviar, setIsDisableEnviar] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
 
+
+  useEffect(() => {
+    if(description.length <= 1 )  return setIsDisable(true)
+    if(description.length > 1) return setIsDisable(false)
+  }, [description])
+  
   const handlePickImage = async () => {
     const newImages = await UpImagePicker(); 
     setImages(prevImages => [...prevImages, ...newImages]); 
   };
+
   const handleSubmit = async () => {
     
     // Verificar que los campos requeridos no estén vacíos
     if (!severity || !description || !coordenadas) {
-      Alert.alert('Por favor completa todos los campos.')
-      console.log('Por favor completa todos los campos.');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor completa todos los campos.',
+        visibilityTime: 6000
+      });
       return;
     }
     
     // Verificar que la opción adicional esté seleccionada si es requerida
     if (additionalOptions.length > 0 && !additionalOption) {
-      Alert.alert('Por favor selecciona una opción adicional.')
-      console.log('Por favor selecciona una opción adicional.');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor selecciona una opción adicional.',
+        visibilityTime: 6000
+      });
       return;
     }
   
@@ -53,15 +73,39 @@ export const IncidentForm = ({coordenadas}) => {
         {
           text: 'Enviar',
           onPress: async () => {
-            const URLPhotos = await startUploadingFiles(images);
-            await addNewIncident({severity, additionalOption, description, coordenadas, uid, images_url: URLPhotos});
-            navigate.navigate('ListIncidents')
+            setIsDisableEnviar(true);
+            setIsLoading(true);
+            try {
+              const URLPhotos = await startUploadingFiles(images);
+              await addNewIncident({severity, additionalOption, description, coordenadas, uid, images_url: URLPhotos });
+              setIsDisableEnviar(false);
+              await showSuccessAlert()
+              setSeverity('');
+              setDescription('');
+              setImages([]);
+              setIsLoading(false);
+              navigate.navigate('noConfirmed');
+            } catch (error) {
+              Alert.alert('Error', 'Hubo un problema al enviar el reporte. Por favor intenta de nuevo.');
+              setIsDisableEnviar(false);
+              setIsLoading(false);
+
+            }
           }
         }
       ]
     );
-      
+
+    const showSuccessAlert = async() => {
+      Toast.show({
+        type: 'info',
+        text1: 'Exito',
+        text2: 'Reporte enviado para verificar su veracidad',
+        visibilityTime: 6000
+      });
+    };
   };
+
   
 
 
@@ -114,13 +158,25 @@ export const IncidentForm = ({coordenadas}) => {
         onChangeText={(text) => setDescription(text)}
       />
 
-      <Button style={styles.Button} textColor='#fff' icon={'send'}  onPress={handlePickImage} > subir evidencia </Button>
+      <Button style={styles.Button}
+              textColor='#fff' 
+              icon={'upload'}  
+              onPress={handlePickImage} 
+              disabled={isDisable} > subir evidencia </Button>
       <ScrollView horizontal>
         {images.map((uri, index) => (
           <Image key={index} source={{ uri }} style={styles.image} />
         ))}
       </ScrollView>
-          <Button style={styles.Button} textColor='#fff' icon={'send'}  onPress={handleSubmit} > Enviar </Button>
+          <Button 
+          disabled={isDisableEnviar} 
+          style={styles.Button} 
+          textColor='#fff' 
+          icon={'send'}  
+          onPress={handleSubmit} >
+             Enviar 
+          </Button>
+          <LoadingOverlay visible={isLoading} />
     </View>
   );
 };
@@ -156,7 +212,8 @@ const styles = StyleSheet.create({
 Button: {
   width: '100%',
   borderRadius: 10,
-  backgroundColor: '#2fc4b2'
+  backgroundColor: '#2fc4b2',
+  marginBottom: 10
 }
   
   

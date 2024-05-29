@@ -44,7 +44,7 @@ export const Filters = () => {
                         size={24} 
                         color="black"
                         style={{ paddingRight: 5 }} />
-                    Filters
+                    Filtro
                 </Button>
             </View>
 

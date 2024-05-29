@@ -8,7 +8,6 @@ import { ButtonUbication } from '../Components/ButtonUbication';
 import { Filters } from '../Components/Filters';
 import { TabsButtom } from '../Components/TabsButtom';
 import { CreateZone, generateMarkers, isCoordinateInsideRectangle } from '../../Helpers/CreateZone';
-import { Modal } from 'react-native-paper';
 import { ModalEtiquet } from '../Components/ModalEtiquet';
 import { InfoIncidents } from '../Components/InfoIncidents';
 
@@ -16,8 +15,6 @@ export const MapCollective = ({ navigation }) => {
     const { loadAllIncidents, incidents } = useIncidentStore();
     const [incidentShapes, setIncidentShapes] = useState([]);
     const [mapRegion, setMapRegion] = useState({ lat: 0, lng: 0 });
-    const [selectedIncident, setSelectedIncident] = useState(null);
-    const [clickPosition, setClickPosition] = useState(null);
 
 
     const [showModal, setShowModal] = useState(false);
@@ -95,7 +92,7 @@ export const MapCollective = ({ navigation }) => {
         ) {
           const position = message.payload.touchLatLng;
         
-          const zone = CreateZone(position, 0.001, 0.001)
+          const zone = CreateZone(position, 0.002, 0.002)
 
           const incidentsInsideRectangle = incidents.filter(incident => {
             const coordinate = { lat: incident.ubication.lat, lng: incident.ubication.lng };
@@ -103,9 +100,7 @@ export const MapCollective = ({ navigation }) => {
         });
 
           setRectangle(zone);
-          
-          console.log(position);
-          console.log(zone);
+        
           setIncidentsInsideRectangle(incidentsInsideRectangle);
           if (incidentsInsideRectangle.length > 0) {
             setShowModal(true);
@@ -127,7 +122,13 @@ export const MapCollective = ({ navigation }) => {
     androidHardwareAccelerationDisabled={true}
     mapCenterPosition={mapRegion}
     
-    //mapShapes={incidentShapes}
+    mapShapes={[{
+        shapeType: MapShapeType.CIRCLE,
+            color: '#FF0000',
+            id: 1,
+            center: mapRegion,
+            radius: 20,
+    }]}
     doDebug={false}
     mapMarkers={/* generateMarkers(rectangle) */incidentShapes}
     zoom={13}

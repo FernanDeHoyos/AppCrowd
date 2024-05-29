@@ -1,7 +1,7 @@
 import { CLOUD_URL } from '@env';
 
 export const fileUpload = async (fileUri) => {
-    const cloudURL = CLOUD_URL;
+    const cloudURL = 'https://api.cloudinary.com/v1_1/ddwtyk9ix/image/upload';
    
     const formData = new FormData(); 
     formData.append('file', {

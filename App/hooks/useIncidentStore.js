@@ -19,7 +19,8 @@ export const useIncidentStore = () => {
                     description: description,
                     ubication: coordenadas,
                     id_user: uid,
-                    images_url: images_url
+                    images_url: images_url,
+                    confirm: false 
                 })
                 .select()
 
@@ -27,25 +28,43 @@ export const useIncidentStore = () => {
             dispatch(onAddNewIncident({ severity, additionalOption, description, coordenadas, uid, images_url }))
 
             if (error) {
-                throw new Error(error.message);
+                console.log(error);
             }
         } catch (error) {
             console.log(error)
         }
     }
 
-    // Función para cargar todos los incidentes
-    const loadAllIncidents = async () => {
-        try {
-            let { data: Incident, error } = await supabase
-                .from('Incident')
-                .select('*')
-            // Despachar la acción onLoadIncidents para actualizar el store con los datos recibidos
-            dispatch(onLoadIncidents(Incident))
-        } catch (error) {
-            console.log(error);
-        }
+    // Función para cargar todos los incidentes confirmados
+const loadAllIncidents = async () => {
+    try {
+        let { data: Incident, error } = await supabase
+            .from('Incident')
+            .select('*')
+            .eq('confirm', true); 
+        if (error) throw error;
+        dispatch(onLoadIncidents(Incident));
+    } catch (error) {
+        console.log('Error loading incidents:', error);
     }
+};
+
+const loadUserIncidents = async (userId) => {
+    try {
+        let { data: Incident, error } = await supabase
+            .from('Incident')
+            .select('*')
+            .eq('confirm', false)
+            .eq('id_user', userId);
+        if (error) throw error;
+        console.log('Incident',Incident);
+        return Incident
+    } catch (error) {
+        console.log('Error loading incidents:', error);
+        return [];
+    }
+};
+
 
     // Función para cargar archivos
     const startUploadingFiles = async (files = []) => {
@@ -66,7 +85,6 @@ export const useIncidentStore = () => {
                 .select('*').eq('id_user', id_user)
             // Despachar la acción onLoadIncidents para actualizar el store con los datos recibidos
             dispatch(onLoadIncidents(Incident))
-            console.log('filtro:', Incident);
         } catch (error) {
             console.log(error);
         }
@@ -80,7 +98,6 @@ export const useIncidentStore = () => {
                 .select('*').eq('type_risk', type_risk)
             // Despachar la acción onLoadIncidents para actualizar el store con los datos recibidos
             dispatch(onLoadIncidents(Incident))
-            console.log('filtro:', Incident);
         } catch (error) {
             console.log(error);
         }
@@ -93,6 +110,7 @@ export const useIncidentStore = () => {
         loadAllIncidents,
         startUploadingFiles,
         FilterIncidentById,
-        FilterIncidentByRisk
+        FilterIncidentByRisk,
+        loadUserIncidents
     }
 }

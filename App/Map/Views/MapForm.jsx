@@ -41,7 +41,8 @@ return (
             size: [8, 8],
           },
         ]}
-        //mapCenterPosition={coordinate}
+        mapCenterPosition={coordinate}
+        zoom={13}
         doDebug={false}
         
       />

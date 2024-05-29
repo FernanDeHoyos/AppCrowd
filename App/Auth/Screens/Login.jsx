@@ -4,9 +4,11 @@ import { Button } from 'react-native-elements';
 
 import { useForm } from '../../hooks/useForm';
 import { useAuthStore } from '../../hooks/useAuthStore'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export const Login = ({ navigation }) => {
+    const [showPassword, setShowPassword] = useState(false); 
 
     /* Importamos el metodo para iniciar la autenticacion desde useAuthStore*/
     const {startLogin} = useAuthStore()
@@ -17,6 +19,12 @@ export const Login = ({ navigation }) => {
         email: '',
         password: '',
       });
+
+  
+    // Function to toggle the password visibility state 
+    const toggleShowPassword = () => { 
+        setShowPassword(!showPassword); 
+    }; 
 
     /* Desestructuramos valores de values */
     const {email, password} = values
@@ -31,34 +39,42 @@ export const Login = ({ navigation }) => {
  /* Vista de componentes */
   return (
     <View style={styles.container}>
-     <Text style={styles.title}>Welcome to MyApp!</Text>
+     
+     <View style={styles.logo}>
+     <Text style={styles.title}>Bienvenido</Text>
+     </View>
 
     <View style={styles.containerButtom}>
     <View style={styles.containerBoxInput}>
 
     <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
         <TextInput 
             style={styles.Input}
-            placeholder='Enter your email'
+            placeholder='Ingrese correo'
             value={values.email}
             onChangeText={(text) => handleChange('email', text)}
         />
     </View>
 
 <View style={styles.inputContainer}>
-        <Text style={styles.label}>Password</Text>
         <TextInput 
             style={styles.Input}
-            placeholder='Enter your password'
+            placeholder='Ingrese contraseña'
             value={values.password}
             onChangeText={(text) => handleChange('password', text)}
-            secureTextEntry={true}
+            secureTextEntry={!showPassword}
         />
+        <MaterialCommunityIcons 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={24} 
+                    color="#aaa"
+                    style={styles.icon} 
+                    onPress={toggleShowPassword} 
+                /> 
     </View>
    
     <Button 
-    title='Login'
+    title='INICIAR SESION'
     onPress={signInWithEmail}
     buttonStyle={{
                 borderRadius: 10,
@@ -91,6 +107,7 @@ const styles = StyleSheet.create({
     containerButtom: {
       flex: 1,
       width: '100%',
+      paddingTop: 10,
       backgroundColor: '#f6f6f6',
       alignItems: "center",
       justifyContent: 'center',
@@ -114,26 +131,29 @@ const styles = StyleSheet.create({
         gap: 15,
     },
     Input: {
-        width: '100%', 
-        borderWidth: 1,
-        borderColor: '#fff',
-        borderRadius: 10,
-        paddingHorizontal: 15, 
+        flex: 1, 
+        color: '#000', 
         paddingVertical: 10, 
-        backgroundColor: '#FFF',
+        paddingRight: 10, 
+        fontSize: 16, 
         
     },
 
     inputContainer: {
-        padding: 5,
-        backgroundColor: '#FFF',
-        borderRadius: 10,
-
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        backgroundColor: '#FFF', 
+        borderRadius: 8, 
+        paddingHorizontal: 14, 
     },
     label: {
         color: '#000',
         paddingLeft: 5
     }, 
+    logo: {
+        paddingBottom: 30
+    }
    
   });
  

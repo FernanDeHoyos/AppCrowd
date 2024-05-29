@@ -19,22 +19,29 @@ export const useAuthStore = () => {
             const { error, data } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 Alert.alert(error.message);
+                dispatch(logout('Error de autenticacion'))
                 return;
             }
 
             // Obtener el token de acceso y otros datos relevantes
             const { session, user } = data;
-
+            const { user_metadata } = user;
             // Guardar el token de acceso en AsyncStorage
             await AsyncStorage.setItem('supabaseToken', session.access_token);
 
             // Guardar otros datos relevantes (opcional)
             // Por ejemplo, puedes guardar el nombre del usuario
-            await AsyncStorage.setItem('userName', user.email);
+            await AsyncStorage.setItem('userEmail', user.email);
             await AsyncStorage.setItem('UserId', user.id);
-            console.log(data);
+            await AsyncStorage.setItem('UserName', user_metadata.first_name);
             // Dispatch de la acción de login
-            dispatch(login({ name: user.email, uid: user.id }));
+            dispatch(login({ 
+                name:user_metadata.first_name, 
+                last_name:user_metadata.last_name,  
+                phone:user_metadata.phone, 
+                age:user_metadata.age,
+                email: user.email, 
+                uid: user.id }));
 
         } catch (error) {
             dispatch(logout('Error de autenticacion'))
@@ -43,7 +50,6 @@ export const useAuthStore = () => {
             }, 10)
 
             await AsyncStorage.removeItem('supabaseToken');
-            console.error('Error during login:', error);
             Alert.alert('An error occurred during login. Please try again later.');
         }
     }
@@ -72,7 +78,7 @@ export const useAuthStore = () => {
         /* verificamos si hay algun error */
         if (error) Alert.alert(error.message)
          /* Le decimos al usuario que verfifique su email */
-        if (!session) Alert.alert('Please check your inbox for email verification!')
+        if (!session) Alert.alert('Favor revisar correo de registro para verificar')
        
     }
 
@@ -80,6 +86,7 @@ export const useAuthStore = () => {
       y mantenerlo en la app hasta que su token expire */
     const checkAuthToken = async () => {
         try {
+            dispatch(checkingCredentials());
             // Obtener el token de acceso almacenado en AsyncStorage
             const token = await AsyncStorage.getItem('supabaseToken');
             // Verificar si el token está presente
@@ -90,15 +97,18 @@ export const useAuthStore = () => {
                 await AsyncStorage.removeItem('userName');
                 await AsyncStorage.removeItem('UserId');
                 return;
+            }else{
+                dispatch(logout());
             }
 
-            const username = await AsyncStorage.getItem('userName');
+            const email = await AsyncStorage.getItem('userEmail');
             const uid = await AsyncStorage.getItem('UserId');
-            dispatch(login({ name: username, uid: uid }));
+            const name = await AsyncStorage.getItem('UserName');
+
+            dispatch(login({ name:name ,  email: email, uid: uid }));
 
         } catch (error) {
             // Manejar cualquier error que pueda ocurrir durante el proceso
-            console.error('Error during token verification:', error);
             // Realizar acciones de logout en caso de error
             await AsyncStorage.clear();
             dispatch(logout());
@@ -115,7 +125,6 @@ export const useAuthStore = () => {
             await AsyncStorage.removeItem('supabaseToken');
             await AsyncStorage.removeItem('userName');
             await AsyncStorage.removeItem('UserId');
-            console.log(error);
         } catch (error) {
             console.log(error);
         }

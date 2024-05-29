@@ -1,34 +1,36 @@
 import { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, Modal, Text } from 'react-native';
-import {  Card } from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import { useIncidentStore } from '../../hooks/useIncidentStore';
 import { Filters } from '../Components/Filters';
 import { TabsButtom } from '../Components/TabsButtom';
 import { IncidentModal } from '../Components/IncidentModal';
 import { Button } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
-export const ListIncidents = () => {
-    const { incidents, loadAllIncidents } = useIncidentStore();
+export const IsConfirmed = () => {
+    const { incidents, loadUserIncidents } = useIncidentStore();
+    const { user } = useSelector((state) => state.auth);
+    const [isConfirmed, setIsConfirmed] = useState([]);
     const [selectedIncident, setSelectedIncident] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-
+    const {uid} = user;
     useEffect(() => {
-        loadAllIncidents(); // Cargar incidentes al montar el componente
+        const fetchData = async () => {
+                const not_confirmed = await loadUserIncidents(uid);
+                setIsConfirmed(not_confirmed);
+                console.log('not_confirmed:', not_confirmed);
+        };
+        fetchData();
     }, []);
 
-
-    /*     console.log('incidents:', incidents);
-     */
-    const list = incidents.map((incident, index) => ({
+    const list = isConfirmed.map((incident, index) => ({
         name: incident.type_incident,
         avatar_url: incident.images_url,
         subtitle: incident.description,
         ubication: incident.ubication,
-        id: incident.id // Puedes agregar el ID del incidente si lo necesitas
+        id: incident.id
     }));
-
-    /*     console.log('list:', list);
-     */
 
     const openModal = (incident) => {
         setSelectedIncident(incident);
@@ -41,26 +43,24 @@ export const ListIncidents = () => {
 
     return (
         <View style={styles.listView}>
-            <Filters />
             <ScrollView>
                 <View style={styles.rowContainer}>
                     {list.map((l, i) => (
                         <View key={i} style={styles.cardWrapper}>
                             <Card containerStyle={styles.cardContainer}>
-                                {l.avatar_url && l.avatar_url.length > 0 && // Comprobación de que avatar_url existe y no está vacío
+                                {l.avatar_url && l.avatar_url.length > 0 && (
                                     <Card.Image
-                                        source={{ uri: l.avatar_url[0] }} // Accede al primer elemento del array
+                                        source={{ uri: l.avatar_url[0] }}
                                         style={styles.cardImage}
                                     />
-                                }
+                                )}
                                 <Card.Title>{l.name}</Card.Title>
                                 <Card.Divider />
                                 <Card.FeaturedSubtitle>{l.subtitle}</Card.FeaturedSubtitle>
-                                <Button style={styles.Button}  onPress={() => openModal(l)}>Ver detalles</Button>
+                                <Button style={styles.Button} onPress={() => openModal(l)}>Ver detalles</Button>
                             </Card>
                         </View>
                     ))}
-
                 </View>
             </ScrollView>
             <TabsButtom />
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
-    Button:{
+    Button: {
         backgroundColor: '#fff',
         borderRadius: 30
     }
