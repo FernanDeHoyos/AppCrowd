@@ -82,7 +82,9 @@ const loadUserIncidents = async (userId) => {
         try {
             let { data: Incident, error } = await supabase
                 .from('Incident')
-                .select('*').eq('id_user', id_user)
+                .select('*')
+                .eq('confirm', true)
+                .eq('id_user', id_user)
             // Despachar la acción onLoadIncidents para actualizar el store con los datos recibidos
             dispatch(onLoadIncidents(Incident))
         } catch (error) {
@@ -95,7 +97,9 @@ const loadUserIncidents = async (userId) => {
         try {
             let { data: Incident, error } = await supabase
                 .from('Incident')
-                .select('*').eq('type_risk', type_risk)
+                .select('*')
+                .eq('confirm', true)
+                .eq('type_risk', type_risk)
             // Despachar la acción onLoadIncidents para actualizar el store con los datos recibidos
             dispatch(onLoadIncidents(Incident))
         } catch (error) {

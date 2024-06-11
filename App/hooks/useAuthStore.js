@@ -15,8 +15,12 @@ export const useAuthStore = () => {
     /* Funcion asincrona para iniciar autenticacion de usuario */
     const startLogin = async ({ email, password }) => {
         try {
+            
             dispatch(checkingCredentials())
-            const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+            
+            const { error, data } = await supabase.auth.signInWithPassword({
+                 email: email.trim(), 
+                 password: password.trim() });
             if (error) {
                 Alert.alert(error.message);
                 dispatch(logout('Error de autenticacion'))

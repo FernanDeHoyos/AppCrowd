@@ -20,6 +20,7 @@ export const IncidentForm = ({coordenadas}) => {
   const [severity, setSeverity] = useState('');
   const [additionalOption, setAdditionalOption] = useState('');
   const [additionalOptions, setAdditionalOptions] = useState([]);
+
   const [images, setImages] = useState([]);
   const [isDisable, setIsDisable] = useState(false)
   const [isDisableEnviar, setIsDisableEnviar] = useState(false)
@@ -82,9 +83,11 @@ export const IncidentForm = ({coordenadas}) => {
               await showSuccessAlert()
               setSeverity('');
               setDescription('');
+              setAdditionalOption('');
+              setAdditionalOptions([])
               setImages([]);
               setIsLoading(false);
-              navigate.navigate('noConfirmed');
+              navigate.navigate('ListIncidents');
             } catch (error) {
               Alert.alert('Error', 'Hubo un problema al enviar el reporte. Por favor intenta de nuevo.');
               setIsDisableEnviar(false);

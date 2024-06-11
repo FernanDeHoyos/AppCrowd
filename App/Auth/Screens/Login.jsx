@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import { useForm } from '../../hooks/useForm';
 import { useAuthStore } from '../../hooks/useAuthStore'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 
 
 export const Login = ({ navigation }) => {
@@ -29,10 +30,11 @@ export const Login = ({ navigation }) => {
     /* Desestructuramos valores de values */
     const {email, password} = values
 
+    
     /* utilizamos  startLogin dentro de la funcion signInWithEmail
     Para iniciar autenticacion*/
     async function signInWithEmail() {
-     await startLogin({email, password})
+        await startLogin({email: email.trim(), password: password.trim()})
   }
       
 
