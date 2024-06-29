@@ -53,6 +53,8 @@ export const TabsButtom = () => {
         />}
         onPress={() => navigation.navigate('Settings')} />
 
+
+
     </View>
   )
 }

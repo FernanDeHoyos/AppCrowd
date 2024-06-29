@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230701418192",
+    "project_id": "pushnotifications-c67ce",
+    "storage_bucket": "pushnotifications-c67ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230701418192:android:9307298897956476bc80d5",
+        "android_client_info": {
+          "package_name": "com.fernandehoyos11.AppCrowd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2P9k7ZxdCwhQGtOygKI9GGl7HU0Oi3fY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

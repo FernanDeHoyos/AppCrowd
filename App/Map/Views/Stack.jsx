@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { HeaderStyle } from '../Components/HeaderStyle';
 import { Profiles } from './Profiles';
 import { IsConfirmed } from './IsConfirmed';
+import { NotificationsIncident } from '../Screens/Notifications';
 
 
 
@@ -117,6 +118,25 @@ export const StackMap = () => {
         <Stack.Screen
           name="noConfirmed"
           component={IsConfirmed}
+          options={{
+            headerTitle: 'En espera',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#2FC4B2', // Color del encabezado
+              height: 0, // Altura del encabezado
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+              color: 'white',
+              fontWeight: 'bold', // Estilo del título
+              fontSize: 18, // Tamaño del título
+            },
+          }}
+        />
+
+<Stack.Screen
+          name="notification"
+          component={NotificationsIncident}
           options={{
             headerTitle: 'En espera',
             headerTitleAlign: 'center',

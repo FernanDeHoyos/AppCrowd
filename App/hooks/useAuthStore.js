@@ -101,8 +101,6 @@ export const useAuthStore = () => {
                 await AsyncStorage.removeItem('userName');
                 await AsyncStorage.removeItem('UserId');
                 return;
-            }else{
-                dispatch(logout());
             }
 
             const email = await AsyncStorage.getItem('userEmail');

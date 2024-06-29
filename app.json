@@ -31,7 +31,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.fernandehoyos11.AppCrowd"
+      "package": "com.fernandehoyos11.AppCrowd",
+      "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

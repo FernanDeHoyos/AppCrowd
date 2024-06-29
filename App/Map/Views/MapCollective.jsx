@@ -124,10 +124,10 @@ export const MapCollective = ({ navigation }) => {
     
     mapShapes={[{
         shapeType: MapShapeType.CIRCLE,
-            color: '#FF0000',
+            color: '#272F7A',
             id: 1,
             center: mapRegion,
-            radius: 20,
+            radius: 30,
     }]}
     doDebug={false}
     mapMarkers={/* generateMarkers(rectangle) */incidentShapes}

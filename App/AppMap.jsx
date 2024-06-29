@@ -15,7 +15,7 @@ export const AppMap = () => {
         checkAuthToken()
       },[])
       
-        if(status !== 'checking'){
+        if(status === 'checking'){
             return  <Loading/>
         }
   
