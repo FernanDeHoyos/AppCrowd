@@ -7,6 +7,7 @@ import { TabsButtom } from '../Components/TabsButtom';
 import { IncidentModal } from '../Components/IncidentModal';
 import { Button } from 'react-native-paper';
 
+
 export const ListIncidents = () => {
     const { incidents, loadAllIncidents } = useIncidentStore();
     const [selectedIncident, setSelectedIncident] = useState(null);
@@ -16,19 +17,19 @@ export const ListIncidents = () => {
         loadAllIncidents(); // Cargar incidentes al montar el componente
     }, []);
 
-
-    /*     console.log('incidents:', incidents);
-     */
+    
+    
     const list = incidents.map((incident, index) => ({
         name: incident.type_incident,
+        type_risk: incident.type_risk,
         avatar_url: incident.images_url,
         subtitle: incident.description,
         ubication: incident.ubication,
         id: incident.id // Puedes agregar el ID del incidente si lo necesitas
     }));
 
-    /*     console.log('list:', list);
-     */
+    /* const {type_risk} = list[0] */
+     
 
     const openModal = (incident) => {
         setSelectedIncident(incident);
@@ -41,6 +42,7 @@ export const ListIncidents = () => {
 
     return (
         <View style={styles.listView}>
+            {/* <Text>{type_risk ? type_risk : "Filtro" }</Text> */}
             <Filters />
             <ScrollView>
                 <View style={styles.rowContainer}>
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
         marginBottom: 100,
     },
     cardWrapper: {
-        width: '50%', // Utiliza el 48% del ancho para dejar espacio entre las tarjetas
+        width: '100%', // Utiliza el 48% del ancho para dejar espacio entre las tarjetas
     },
     cardContainer: {
         borderRadius: 10,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     cardImage: {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        height: 100,
+        height: 150,
     },
     centeredView: {
         flex: 1,

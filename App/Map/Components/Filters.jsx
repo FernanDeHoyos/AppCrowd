@@ -4,28 +4,35 @@ import { useSelector } from 'react-redux';
 import { Button, CheckBox } from '@rneui/base';
 import { Ionicons } from '@expo/vector-icons';
 import { useIncidentStore } from '../../hooks/useIncidentStore';
+import { LoadingOverlay } from './LoadingOverlay';
 
 export const Filters = () => {
     const { user: { uid } } = useSelector((state) => state.auth);
     const { FilterIncidentById, FilterIncidentByRisk, loadAllIncidents } = useIncidentStore();
     const [selectedIndex, setIndex] = useState(0);
     const [checkBoxVisible, setCheckBoxVisible] = useState(false); // Estado para controlar la visibilidad de los CheckBox
+    const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
-        if (selectedIndex === 0) {
-            loadAllIncidents();
-        } else if (selectedIndex === 1) {
-            FilterIncidentById(uid);
-        } else if (selectedIndex === 2) {
-            FilterIncidentByRisk('Alto riesgo con apoyo');
-        } else if (selectedIndex === 3) {
-            FilterIncidentByRisk('Mediano riesgo');
-        } else if (selectedIndex === 4) {
-            FilterIncidentByRisk('Bajo riesgo');
-        }
-        
+        const filter = async() =>{
+             setIsLoading(true)
+            if (selectedIndex === 0) {
+                await loadAllIncidents();
+             } else if (selectedIndex === 1) {
+                await FilterIncidentById(uid);
+             } else if (selectedIndex === 2) {
+                await FilterIncidentByRisk('Alto riesgo con apoyo');
+             } else if (selectedIndex === 3) {
+                await FilterIncidentByRisk('Mediano riesgo');
+             } else if (selectedIndex === 4) {
+                await FilterIncidentByRisk('Bajo riesgo');
+             }
+             setCheckBoxVisible(false);
+             setIsLoading(false)
+        } 
+        filter()
         // Ocultar los CheckBox cuando se selecciona un filtro
-        setCheckBoxVisible(false);
     }, [selectedIndex]);
 
     const toggleCheckBoxVisibility = () => {   
@@ -88,6 +95,8 @@ export const Filters = () => {
                     />
                 </View>
             )}
+            <LoadingOverlay visible={isLoading} />
+
         </>
     );
 };
