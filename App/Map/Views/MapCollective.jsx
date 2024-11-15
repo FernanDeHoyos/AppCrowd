@@ -141,28 +141,28 @@ export const MapCollective = ({ navigation }) => {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_uno, // Las coordenadas que delimitan la ciudad de Montería
                     color: 'rgba(0, 150, 150, 1)', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(0, 255, 255, 0.5)',
+                    fillColor: 'rgba(0, 255, 255, 1)',
                     strokeWidth: 2,
                 },
                 {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_dos, // Las coordenadas que delimitan la ciudad de Montería
                     color: '#0CADF6', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(0, 255, 255, 0.3)',
+                    fillColor: '#0CADF6',
                     strokeWidth: 2,
                   },
                 {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_tres, // Las coordenadas que delimitan la ciudad de Montería
                     color: '#ACADF6', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(0, 255, 255, 0.3)',
+                    fillColor: '#ACADF6',
                     strokeWidth: 2,
                   },
                   {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_cuatro, // Las coordenadas que delimitan la ciudad de Montería
                     color: '#0cf0fc', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    fillColor: '#0cf0fc',
                     strokeWidth: 2,
                   },
 
@@ -170,7 +170,7 @@ export const MapCollective = ({ navigation }) => {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_cinco, // Las coordenadas que delimitan la ciudad de Montería
                     color: '#6B800c', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    fillColor: '#6B800c',
                     strokeWidth: 2,
                   },
 
@@ -178,28 +178,28 @@ export const MapCollective = ({ navigation }) => {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_seis, // Las coordenadas que delimitan la ciudad de Montería
                     color: '#FAA5fc', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    fillColor: '#FAA5fc',
                     strokeWidth: 2,
                   },
                   {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_siete, // Las coordenadas que delimitan la ciudad de Montería
-                    color: '#8AA5fc', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    color: '#8B05fc', // Un cyan más oscuro para el borde del polígono
+                    fillColor: '#8B05fc',
                     strokeWidth: 2,
                   },
                   {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_ocho, // Las coordenadas que delimitan la ciudad de Montería
-                    color: '#8B05fc', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    color: '#1BC5A0', // Un cyan más oscuro para el borde del polígono
+                    fillColor: '#1BC5A0',
                     strokeWidth: 2,
                   },
                   {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: comuna_ocho_dos, // Las coordenadas que delimitan la ciudad de Montería
-                    color: '#8B05fc', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(1, 255, 255, 0.3)',
+                    color: '#1BC5A0', // Un cyan más oscuro para el borde del polígono
+                    fillColor: '#1BC5A0',
                     strokeWidth: 2,
                   },
                   {
@@ -219,10 +219,11 @@ export const MapCollective = ({ navigation }) => {
                   {
                     shapeType: MapShapeType.POLYGON, // Definimos un polígono
                     positions: monteriaPolygon, // Las coordenadas que delimitan la ciudad de Montería
-                    color: 'rgba(0, 150, 150, 1)', // Un cyan más oscuro para el borde del polígono
-                    fillColor: 'rgba(0, 255, 255, 0.3)',
+                    color: 'rgba(0,0,0,0.0)', // Un cyan más oscuro para el borde del polígono
+                    fillColor: 'rgba(0,0,0,0.0)',
                     strokeWidth: 2,
                   },
+                  
                 {
                     shapeType: MapShapeType.CIRCLE,
                     color: '#272F7A',

@@ -5,8 +5,15 @@ import { Provider } from 'react-redux';
 import { AppMap } from './App/AppMap';
 import { NotificationsIncident } from './App/Map/Screens/Notifications';
 import Toast from 'react-native-toast-message';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 export default function App() {
+
+  // Configuración con tu ID de cliente de Firebase (lo obtienes en la consola de Firebase)
+  GoogleSignin.configure({
+    webClientId: '752793504199-01r71q4n9p314vd4lfap7u4n34tc115q.apps.googleusercontent.com', // Reemplaza con tu Web Client ID de Firebase
+  });
 
   return (
     

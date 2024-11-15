@@ -5,6 +5,10 @@ import { checkingCredentials, clearErrorMessage, login, logout } from "../Store/
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { onLogoutIncident } from "../Store/Incident/IncidentSlice"
 
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+
 
 export const useAuthStore = () => {
 
@@ -15,12 +19,13 @@ export const useAuthStore = () => {
     /* Funcion asincrona para iniciar autenticacion de usuario */
     const startLogin = async ({ email, password }) => {
         try {
-            
+
             dispatch(checkingCredentials())
-            
+
             const { error, data } = await supabase.auth.signInWithPassword({
-                 email: email.trim(), 
-                 password: password.trim() });
+                email: email.trim(),
+                password: password.trim()
+            });
             if (error) {
                 Alert.alert(error.message);
                 dispatch(logout('Error de autenticacion'))
@@ -39,13 +44,14 @@ export const useAuthStore = () => {
             await AsyncStorage.setItem('UserId', user.id);
             await AsyncStorage.setItem('UserName', user_metadata.first_name);
             // Dispatch de la acción de login
-            dispatch(login({ 
-                name:user_metadata.first_name, 
-                last_name:user_metadata.last_name,  
-                phone:user_metadata.phone, 
-                age:user_metadata.age,
-                email: user.email, 
-                uid: user.id }));
+            dispatch(login({
+                name: user_metadata.first_name,
+                last_name: user_metadata.last_name,
+                phone: user_metadata.phone,
+                age: user_metadata.age,
+                email: user.email,
+                uid: user.id
+            }));
 
         } catch (error) {
             dispatch(logout('Error de autenticacion'))
@@ -78,16 +84,16 @@ export const useAuthStore = () => {
             }
         )
         /* desestructuramos session de la data */
-        const {session} = data
+        const { session } = data
         /* verificamos si hay algun error */
         if (error) Alert.alert(error.message)
-         /* Le decimos al usuario que verfifique su email */
+        /* Le decimos al usuario que verfifique su email */
         if (!session) Alert.alert('Favor revisar correo de registro para verificar')
-       
+
     }
 
-     /* Funcion asincrona para verficar si el usuario sigue autenticado
-      y mantenerlo en la app hasta que su token expire */
+    /* Funcion asincrona para verficar si el usuario sigue autenticado
+     y mantenerlo en la app hasta que su token expire */
     const checkAuthToken = async () => {
         try {
             dispatch(checkingCredentials());
@@ -107,7 +113,7 @@ export const useAuthStore = () => {
             const uid = await AsyncStorage.getItem('UserId');
             const name = await AsyncStorage.getItem('UserName');
 
-            dispatch(login({ name:name ,  email: email, uid: uid }));
+            dispatch(login({ name: name, email: email, uid: uid }));
 
         } catch (error) {
             // Manejar cualquier error que pueda ocurrir durante el proceso
@@ -132,6 +138,48 @@ export const useAuthStore = () => {
         }
     }
 
+    const authWithFirebase = async(email, password) => {
+        try {
+            const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+            console.log('User account created & signed in!', userCredential.user);
+          } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+              console.log('That email address is already in use!');
+            }
+            if (error.code === 'auth/invalid-email') {
+              console.log('That email address is invalid!');
+            }
+            console.error(error);
+          }
+    }
+
+    const onGoogleButtonPress = async () => {
+        try {
+            // Check if your device supports Google Play
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    
+            // Sign in and retrieve the user's ID token
+            const signInResult = await GoogleSignin.signIn();
+            const {idToken} = signInResult.data;
+
+            console.log('error:',signInResult.data);
+    
+            if (!idToken) {
+                throw new Error('No ID token found');
+            }
+    
+            // Create a Google credential with the token
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    
+            // Sign-in the user with the credential
+            const authSuccessful = await auth().signInWithCredential(googleCredential);
+            console.log('Login successful:', authSuccessful);
+        } catch (error) {
+            console.error('Google Sign-In Error:', error);
+        }
+    };
+    
+
 
     return {
         //variables
@@ -142,6 +190,9 @@ export const useAuthStore = () => {
         checkAuthToken,
         startSignUp,
         startLogout,
+
+        authWithFirebase,
+        onGoogleButtonPress
 
     }
 }

@@ -12,7 +12,7 @@ export const Login = ({ navigation }) => {
     const [showPassword, setShowPassword] = useState(false); 
 
     /* Importamos el metodo para iniciar la autenticacion desde useAuthStore*/
-    const {startLogin} = useAuthStore()
+    const {startLogin, authWithFirebase, onGoogleButtonPress} = useAuthStore()
 
     const [loading, setLoading] = useState(false)
     /* Hooks personalizado para formulario {useForm} */
@@ -34,7 +34,9 @@ export const Login = ({ navigation }) => {
     /* utilizamos  startLogin dentro de la funcion signInWithEmail
     Para iniciar autenticacion*/
     async function signInWithEmail() {
-        await startLogin({email: email.trim(), password: password.trim()})
+        console.log('fernan');
+        await onGoogleButtonPress()
+        //await authWithFirebase(email.trim(), password.trim()) //uso
   }
       
 
